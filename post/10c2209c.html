@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="学习Vim的时候，接触了yy和p的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行yy命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的系统剪贴板。但是，此”系统”剪贴板，也不是真正的”系统”剪贴板。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim的系统剪贴板的奇妙发现">
+<meta property="og:url" content="http://example.com/post/10c2209c.html">
+<meta property="og:site_name" content="Yihao Chan&#39;s Blog">
+<meta property="og:description" content="学习Vim的时候，接触了yy和p的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行yy命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的系统剪贴板。但是，此”系统”剪贴板，也不是真正的”系统”剪贴板。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png">
+<meta property="og:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png">
+<meta property="article:published_time" content="2020-12-11T08:34:35.000Z">
+<meta property="article:modified_time" content="2020-12-11T13:17:17.168Z">
+<meta property="article:author" content="Yihao Chan">
+<meta property="article:tag" content="Vim">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png">
+
+<link rel="canonical" href="http://example.com/post/10c2209c.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Vim的系统剪贴板的奇妙发现 | Yihao Chan's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yihao Chan's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Something about Chen Yihao.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/post/10c2209c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar.jpg">
+      <meta itemprop="name" content="Yihao Chan">
+      <meta itemprop="description" content="God helps those who help themselves.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yihao Chan's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vim的系统剪贴板的奇妙发现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-12-11 16:34:35 / Modified: 21:17:17" itemprop="dateCreated datePublished" datetime="2020-12-11T16:34:35+08:00">2020-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operation-System/" itemprop="url" rel="index"><span itemprop="name">Operation System</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，此”系统”剪贴板，也不是真正的”系统”剪贴板。</p>
+<a id="more"></a>
+
+<p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
+<h2 id="1-查看Vim是否支持系统剪贴板"><a href="#1-查看Vim是否支持系统剪贴板" class="headerlink" title="1. 查看Vim是否支持系统剪贴板"></a>1. 查看Vim是否支持系统剪贴板</h2><p>在终端中输入<code>vim --version | grep clipboard</code>，观察<strong>clipboard</strong>选项前的符号：如果为 <strong>-</strong> 号，说明当前的Vim不支持系统剪贴板，需要先在终端执行<code>sudo apt install vim-gnome</code>，之后再次执行<code>vim --version | grep clipboard</code>，可以看到<strong>clipboard</strong>选项前的符号为 <strong>+</strong> 号，表示当前的Vim已经支持系统剪贴板。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png"></p>
+<h2 id="2-查看Linux系统的系统剪贴板内容"><a href="#2-查看Linux系统的系统剪贴板内容" class="headerlink" title="2. 查看Linux系统的系统剪贴板内容"></a>2. 查看Linux系统的系统剪贴板内容</h2><p>执行<code>sudo apt install xclip</code>安装xclip，再执行<code>xclip -o</code>命令，就可以查看当前Linux系统的系统剪贴板内容。</p>
+<p>e.g. 在终端上打印一串字符：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png"></p>
+<p>然后用鼠标选中，按下<code>ctrl + shift + c</code>复制：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png"></p>
+<p>执行<code>xclip -o</code>命令查看系统剪贴板内容：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png"></p>
+<p>此时可以看到，用户手动复制到了Linux的系统剪贴板的内容已经通过<code>xclip -o</code>成功显示。</p>
+<h2 id="3-通过Vim的系统剪贴板将内容复制到Vim以外的地方"><a href="#3-通过Vim的系统剪贴板将内容复制到Vim以外的地方" class="headerlink" title="3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方"></a>3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</h2><p>使用Vim打开任意一个文件，按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，执行<code>:reg</code>查看Vim的寄存器，可以看到Vim的系统剪贴板寄存器(“+寄存器)已存放我们刚才复制的一整行内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
+<p>之后<strong>不要退出</strong>Vim窗口，打开任意一个Vim以外的地方，快捷键<code>ctrl + v</code>，可以看到在Vim中复制的内容已经粘贴到Vim以外的地方。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
+<p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
+<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印_Test for system clipboard._并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
+<p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再在终端按下快捷键<code>ctrl + shift +v</code>，什么都没有。但是执行<code>xclip -o</code>却还是查看到了之前我手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
+<p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
+<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也**没有”归还”**Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
+<h2 id="6-小结"><a href="#6-小结" class="headerlink" title="6. 小结"></a>6. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。至于到底是不是我们所猜想的这个原因，等我有能力读懂Vim的源代码之后再下定论。</p>
+
+    </div>
+
+    
+    
+    
+    
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢阅读。-------------</div>
+
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Vim/" rel="tag"><i class="fa fa-tag"></i> Vim</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/4c43581b.html" rel="prev" title="God helps those who help themselves.">
+      <i class="fa fa-chevron-left"></i> God helps those who help themselves.
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/post/d87f7e0c.html" rel="next" title="test">
+      test <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9F%A5%E7%9C%8BVim%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF"><span class="nav-text">1. 查看Vim是否支持系统剪贴板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9F%A5%E7%9C%8BLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%86%85%E5%AE%B9"><span class="nav-text">2. 查看Linux系统的系统剪贴板内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%80%9A%E8%BF%87Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B0%86%E5%86%85%E5%AE%B9%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BB%93%E5%90%88xclip-o%E4%BB%94%E7%BB%86%E8%A7%82%E5%AF%9F"><span class="nav-text">4. 结合xclip -o仔细观察</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%B5%85%E6%98%BE%E9%80%9A%E4%BF%97%E7%9A%84%E7%8C%9C%E6%83%B3%E4%B8%8E%E6%8B%99%E8%A7%81"><span class="nav-text">5. 浅显通俗的猜想与拙见</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%B0%8F%E7%BB%93"><span class="nav-text">6. 小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yihao Chan"
+      src="/assets/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Yihao Chan</p>
+  <div class="site-description" itemprop="description">God helps those who help themselves.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/YihaoChan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;YihaoChan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyihao19990707@163.com" title="E-Mail → mailto:chenyihao19990707@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yihaochan" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yihaochan" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yihao Chan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">8k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">7 mins.</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
