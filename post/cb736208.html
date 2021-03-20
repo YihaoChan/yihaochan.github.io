@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91frps.png">
 <meta property="og:image" content="http://example.com/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%86%85%E7%BD%91frpc.png">
 <meta property="article:published_time" content="2021-03-20T21:26:28.000Z">
-<meta property="article:modified_time" content="2021-03-20T22:57:33.737Z">
+<meta property="article:modified_time" content="2021-03-20T23:02:47.008Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="FRP">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-21 05:26:28 / Modified: 06:57:33" itemprop="dateCreated datePublished" datetime="2021-03-21T05:26:28+08:00">2021-03-21</time>
+              <time title="Created: 2021-03-21 05:26:28 / Modified: 07:02:47" itemprop="dateCreated datePublished" datetime="2021-03-21T05:26:28+08:00">2021-03-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,6 +262,8 @@
       
         <h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>最近和同学在做大数据比赛，需要用到GPU服务器加速模型训练。而自己在家里，没有服务器资源可用。另一位同学在学校，他们的实验室有服务器，且可以(偷偷)拿来跑比赛要用的模型，但是只能用校园网才能连上。而我又需要经常用到服务器，总是发给他们跑也怪麻烦的，所以想到了一个办法——内网穿透。通过内网穿透，就可以实现从我自己(校外)的机器访问到校园内的实验室机器。此处特别感谢两位技术宅同学想到了这个办法！</p>
 <p>一开始，A同学先用他自己已经租了的阿里云服务器配置好了一遍内网穿透。而我这几天也租(免费试用)了一个来玩玩，所以也想尝试下自己搭一下内网穿透。</p>
+<a id="more"></a>
+
 <h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1 环境配置"></a>1 环境配置</h1><h2 id="1-1-公网VPS"><a href="#1-1-公网VPS" class="headerlink" title="1.1 公网VPS"></a>1.1 公网VPS</h2><p>实现内网穿透需要有一台固定IP的公网VPS，可用它作为跳板访问内网端口，而这台具有固定IP的公网VPS就是我目前已经在阿里云上配置好的公网服务器。</p>
 <p>在阿里云官网上查询到我租的公网服务器的<strong>公网IP</strong>为47.106.232.139：</p>
 <p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91IP.png"></p>
