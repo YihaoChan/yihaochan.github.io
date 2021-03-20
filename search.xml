@@ -3,7 +3,7 @@
   <entry>
     <title>Vim的系统剪贴板的奇妙发现</title>
     <url>/post/10c2209c.html</url>
-    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，此”系统”剪贴板，也不是真正的”系统”剪贴板。</p>
+    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
 <a id="more"></a>
 
 <p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
@@ -23,7 +23,7 @@
 <p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
 <p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
 <p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
-<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印_Test for system clipboard._并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
+<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印(Test for system clipboard.)并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
 <p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
 <p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
 <p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
@@ -31,14 +31,135 @@
 <p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
 <h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
 <p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
-<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也**没有”归还”**Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
-<h2 id="6-小结"><a href="#6-小结" class="headerlink" title="6. 小结"></a>6. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。至于到底是不是我们所猜想的这个原因，等我有能力读懂Vim的源代码之后再下定论。</p>
+<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也<strong>没有归还</strong>Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
+<h2 id="6-尝试将内容复制到Linux的系统粘贴板"><a href="#6-尝试将内容复制到Linux的系统粘贴板" class="headerlink" title="6. 尝试将内容复制到Linux的系统粘贴板"></a>6. 尝试将内容复制到Linux的系统粘贴板</h2><p>那么，如何真正做到在Vim中复制内容之后，即使在将Vim关闭之后，也能在其他地方粘贴呢？</p>
+<h3 id="6-1-尝试1：进入Vim的可视模式"><a href="#6-1-尝试1：进入Vim的可视模式" class="headerlink" title="6.1 尝试1：进入Vim的可视模式"></a>6.1 尝试1：进入Vim的可视模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>v</code>进入可视模式。按左右方向键对字符进行选中，再按下y键进行复制。关闭Vim，敲下粘贴快捷键，<strong>一片空白。</strong></p>
+<p>结论：可视模式无法将Vim中的内容复制到Linux的系统剪贴板。</p>
+<h3 id="6-2-尝试2：让Vim进程进入后台"><a href="#6-2-尝试2：让Vim进程进入后台" class="headerlink" title="6.2 尝试2：让Vim进程进入后台"></a>6.2 尝试2：让Vim进程进入后台</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，按下Linux系统快捷键<code>ctrl + z</code>将Vim进程放到后台。此时Vim进程已经被放到后台，并处于suspended(暂停)状态。</p>
+<p>执行<code>bg %1</code>命令让Vim进程在后台运行，可以看到Vim进程在continued状态之后还是切换到了suspended状态，执行<code>jobs</code>命令，Vim进程还是处于suspended状态。在任意一处按下Linux系统的粘贴快捷键，依旧是<strong>一片空白。</strong></p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%B0%86Vim%E6%94%BE%E5%88%B0%E5%90%8E%E5%8F%B0bg.png"></p>
+<p>结论：将Vim进程放到后台，只能让Vim处于suspended状态，且无法让在Vim中的复制到Vim的系统剪贴板的内容进入Linux的系统剪贴板。</p>
+<h3 id="6-3-尝试3：进入Vim的插入模式"><a href="#6-3-尝试3：进入Vim的插入模式" class="headerlink" title="6.3 尝试3：进入Vim的插入模式"></a>6.3 尝试3：进入Vim的插入模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>i</code>进入插入模式。用<strong>鼠标</strong>手动选中内容，并按下Linux系统的复制快捷键<code>ctrl + shift + c</code>复制。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6.png"></p>
+<p>关闭Vim，敲下Linux的粘贴快捷键，<strong>成功</strong>将Vim中内容复制到Vim以外。此时执行<code>xclip -o</code>命令，可以看到Linux的系统剪贴板也显示我们在Vim中通过插入模式用鼠标选中并复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6-%E5%85%B3%E6%8E%89%E5%90%8E%E7%B2%98%E8%B4%B4.png"></p>
+<p>结论：要想在关掉VIm之后，将在Vim中复制的内容送到Linux的系统剪贴板，需要在Vim中切换到插入模式，并用鼠标手动选中内容，再按下Linux系统的复制快捷键。之后即使关掉Vim，也能将内容粘贴到任意地方。<strong>但是</strong>，这不就违背了Vim的核心思想——“只通过键盘操作，解放鼠标操作”了吗？(滑稽)。</p>
+<p>或许有人会说：在不关掉Vim的时候进行粘贴不就好了嘛。假设我需要把这部分复制的内容粘贴很多次，而且并非同时粘贴，可能是间断性不定时地粘贴，那么如果采用Vim的”系统”剪贴板进行复制粘贴的话，就意味着我需要一直开着这个Vim进程，不能人为/意外地关闭它。对于我这种强迫症来说，是接受不了的。对于不会用到的东西/进程，我一定选择丢弃~</p>
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。如果真要在关闭Vim之后还能获得在Vim中复制的内容，办法就是切换到Vim的插入模式，用鼠标进行选中和复制，之后不管关闭Vim与否，都可以进行粘贴。</p>
+<p>至于我们的猜想到底对不对，等我有能力读懂Vim的源代码之后再下定论。</p>
 ]]></content>
       <categories>
         <category>Operation System</category>
       </categories>
       <tags>
         <tag>Vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次内网穿透</title>
+    <url>/post/cb736208.html</url>
+    <content><![CDATA[<h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>最近和同学在做大数据比赛，需要用到GPU服务器加速模型训练。而自己在家里，没有服务器资源可用。另一位同学在学校，他们的实验室有服务器，且可以(偷偷)拿来跑比赛要用的模型，但是只能用校园网才能连上。而我又需要经常用到服务器，总是发给他们跑也怪麻烦的，所以想到了一个办法——内网穿透。通过内网穿透，就可以实现从我自己(校外)的机器访问到校园内的实验室机器。此处特别感谢两位技术宅同学想到了这个办法！</p>
+<p>一开始，A同学先用他自己已经租了的阿里云服务器配置好了一遍内网穿透。而我这几天也租(免费试用)了一个来玩玩，所以也想尝试下自己搭一下内网穿透。</p>
+<h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1 环境配置"></a>1 环境配置</h1><h2 id="1-1-公网VPS"><a href="#1-1-公网VPS" class="headerlink" title="1.1 公网VPS"></a>1.1 公网VPS</h2><p>实现内网穿透需要有一台固定IP的公网VPS，可用它作为跳板访问内网端口，而这台具有固定IP的公网VPS就是我目前已经在阿里云上配置好的公网服务器。</p>
+<p>在阿里云官网上查询到我租的公网服务器的<strong>公网IP</strong>为47.106.232.139：</p>
+<p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91IP.png"></p>
+<h2 id="1-2-FRP"><a href="#1-2-FRP" class="headerlink" title="1.2 FRP"></a>1.2 FRP</h2><p>实现内网穿透的方式有多种，我们用的是FRP来实现。FRP(Fast Reverse Proxy)就是一个反向代理软件，它体积轻量但功能很强大，可以<strong>使处于内网或防火墙后的设备对外界提供服务</strong>，它支持HTTP、TCP、UDP等众多协议。我们今天仅讨论TCP和UDP相关的内容。</p>
+<p>FRP结构很简单，分为frps和frpc两个可执行程序。<strong>在公网服务器上运行frps，在内网机器上运行frpc</strong>即可。</p>
+<h2 id="1-3-端口"><a href="#1-3-端口" class="headerlink" title="1.3 端口"></a>1.3 端口</h2><p>约定用于<strong>frps和frpc进程运行时占用的端口</strong>号为7007，用于<strong>访问内网机器时内网机器开放的端口</strong>号为7777。这两个端口都要在阿里云的安全组上面开放。</p>
+<p>在阿里云上添加安全组，开放两个端口：</p>
+<ol>
+<li>一个用于frps和frpc运行时占用的端口(下图中为7007)；</li>
+<li>一个用于从外面的网络访问实验室机器时，内网机器所开放的端口(下图中为7777)。</li>
+</ol>
+<p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E9%98%BF%E9%87%8C%E4%BA%91%E7%AB%AF%E5%8F%A3.png"></p>
+<h1 id="2-免密连接服务器"><a href="#2-免密连接服务器" class="headerlink" title="2 免密连接服务器"></a>2 免密连接服务器</h1><p>由于每次ssh连接服务器时都需要输入密码，因此，如果能够保证安全又想节省时间的情况的话，通过以下操作可去掉每次都要输入密码的时间，实现免密连接。</p>
+<p>在<strong>本地机器</strong>创建密钥，一路回车：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096</span><br></pre></td></tr></table></figure>
+
+<p>把密钥从本地上传到服务器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;.ssh</span><br><span class="line">scp id_rsa.pub root@47.106.232.139:~&#x2F;tmp.pub</span><br></pre></td></tr></table></figure>
+
+<p>登录<strong>服务器</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh root@47.106.232.139</span><br></pre></td></tr></table></figure>
+
+<p>创建文件夹并写入信任名单：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir ~&#x2F;.ssh</span><br><span class="line">cat ~&#x2F;tmp.pub &gt;&gt; ~&#x2F;.ssh&#x2F;authorized_keys</span><br><span class="line">rm ~&#x2F;tmp.pub</span><br></pre></td></tr></table></figure>
+
+<p><strong>退出服务器</strong>，再ssh连接，发现不需要密码了，成功。</p>
+<h1 id="3-FRP服务器端"><a href="#3-FRP服务器端" class="headerlink" title="3 FRP服务器端"></a>3 FRP服务器端</h1><p>ssh连接阿里云服务器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh root@47.106.232.139</span><br></pre></td></tr></table></figure>
+
+<p>在公网服务器端下载FRP并解压，此处下载0.36.1版本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp&#x2F;releases&#x2F;download&#x2F;v0.36.1&#x2F;frp_0.36.1_linux_amd64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf frp_0.36.1_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>吐槽一句，私以为阿里云这种级别会自己帮我们把各种网络啥的配置好，然后访问github就会快一点，没想到还是龟速，后来才得知租一台服务器其实也相当于拿到了一台什么都没有的机器。所以，如果wget下载github上的文件实在太慢的话，就找一下Github下载链接的镜像版本，这样就快很多。</p>
+<p>因为<strong>公网服务器充当frp服务器端</strong>，所以只留下以下两个文件即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">frps  frps.ini</span><br></pre></td></tr></table></figure>
+
+<p>修改frps.ini配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim .&#x2F;frps.ini</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91frps.png"></p>
+<p>其中，bind_port就是先前在阿里云上开放的用于frp运行时占用的端口，此处设置为7007。</p>
+<h1 id="4-FRP客户端"><a href="#4-FRP客户端" class="headerlink" title="4 FRP客户端"></a>4 FRP客户端</h1><p>由于人没在学校用不了校园网，而同学之前已经做过一个端口的内网穿透，所以先借助这个跳板连上实验室机器。其中，7788是他们已经成功内网穿透的一个端口，公网服务器IP是已经成功内网穿透的公网服务器IP。所以，先ssh连上内网机器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 7788 实验室机器用户名@公网服务器IP</span><br></pre></td></tr></table></figure>
+
+<p>同样，在内网端下载FRP并解压，此处下载0.36.1版本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp&#x2F;releases&#x2F;download&#x2F;v0.36.1&#x2F;frp_0.36.1_linux_amd64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf frp_0.36.1_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>因为<strong>内网机器充当frp客户端</strong>，所以只留下以下两个文件即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">frpc   frpc.ini</span><br></pre></td></tr></table></figure>
+
+<p>修改frpc.ini配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim .&#x2F;frpc.ini</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%86%85%E7%BD%91frpc.png"></p>
+<p>其中：</p>
+<ol>
+<li>server_addr为<strong>阿里云公网服务器IP</strong>；</li>
+<li>server_port为先前在阿里云上开放的用于frp运行时占用的端口，即需要和frps.ini中的bind_port对齐，此处设置为7007；</li>
+<li>remote_port为先前在阿里云上开放的用于访问内网机器的端口，此处设置为7777。</li>
+</ol>
+<h1 id="5-后台运行FRP"><a href="#5-后台运行FRP" class="headerlink" title="5 后台运行FRP"></a>5 后台运行FRP</h1><h2 id="5-1-公网服务器端"><a href="#5-1-公网服务器端" class="headerlink" title="5.1 公网服务器端"></a>5.1 公网服务器端</h2><p>首先，在<strong>公网服务器端后台运行frps</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nohup .&#x2F;frps -c .&#x2F;frps.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>输入<code>jobs</code>命令，若看到进程状态是Running，即frps进程运行成功。</p>
+<h2 id="5-2-内网机器端"><a href="#5-2-内网机器端" class="headerlink" title="5.2 内网机器端"></a>5.2 内网机器端</h2><p>其次，在<strong>内网机器端后台运行frpc</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nohup .&#x2F;frpc -c .&#x2F;frpc.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>输入<code>jobs</code>命令，若看到进程状态是Running，即frpc进程运行成功。</p>
+<h1 id="6-访问内网"><a href="#6-访问内网" class="headerlink" title="6 访问内网"></a>6 访问内网</h1><p>最后一步，通过外网机器访问内网机器。在<strong>本地</strong>命令行窗口输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 7777 实验室机器用户名@47.106.232.139</span><br></pre></td></tr></table></figure>
+
+<p>不出意外的话，输入密码就连接成功啦。</p>
+<h1 id="7-过程中遇到的问题"><a href="#7-过程中遇到的问题" class="headerlink" title="7 过程中遇到的问题"></a>7 过程中遇到的问题</h1><h2 id="7-1-防火墙"><a href="#7-1-防火墙" class="headerlink" title="7.1 防火墙"></a>7.1 防火墙</h2><p>在公网服务器端运行frps，报no route to host的错误。这种错误是由于公网服务器端的防火墙没有关闭引起的。因此，在公网服务器端输入以下命令：</p>
+<p>查看防火墙状态</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
+
+<p>停止防火墙</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure>
+
+<p>禁止firewall开机启动</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl disable firewalld.service </span><br></pre></td></tr></table></figure>
+
+<p>问题解决。</p>
+<h2 id="7-2-端口占用"><a href="#7-2-端口占用" class="headerlink" title="7.2 端口占用"></a>7.2 端口占用</h2><p>由于一开始不太懂得怎么操作，所以有时候会把某一个端口开了之后，又在相同的端口上运行了其他进程，故会报Error starting userland proxy: listen tcp 0.0.0.0:xxxx: bind: address already in use的错误。这种情况下，需要先查看当前机器的端口占用情况，然后把端口进程杀死即可。</p>
+<p>查看端口占用情况：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -tanlp</span><br></pre></td></tr></table></figure>
+
+<p>查看到需要停止的端口进程PID后，输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kill PID</span><br></pre></td></tr></table></figure>
+
+<p>即可将该端口处的进程停止。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://blog.csdn.net/cao0507/article/details/82758288">阿里云服务器实现frp内网穿透</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/45445979">frp实现内网穿透</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/347239470?utm_source=wechat_session&utm_medium=social&utm_oi=939179790134165504">在外如何访问内网？—— FRP内网穿透</a></p>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>FRP</tag>
       </tags>
   </entry>
   <entry>
