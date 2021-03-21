@@ -63,7 +63,7 @@
 <a id="more"></a>
 
 <h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1 环境配置"></a>1 环境配置</h1><h2 id="1-1-公网VPS"><a href="#1-1-公网VPS" class="headerlink" title="1.1 公网VPS"></a>1.1 公网VPS</h2><p>实现内网穿透需要有一台固定IP的公网VPS，可用它作为跳板访问内网端口，而这台具有固定IP的公网VPS就是我目前已经在阿里云上配置好的公网服务器。</p>
-<p>在阿里云官网上查询到我租的公网服务器的<strong>公网IP</strong>为47.106.232.139：</p>
+<p>在阿里云控制台上查询到我租的公网服务器的<strong>公网IP</strong>为47.106.232.139：</p>
 <p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91IP.png"></p>
 <h2 id="1-2-FRP"><a href="#1-2-FRP" class="headerlink" title="1.2 FRP"></a>1.2 FRP</h2><p>实现内网穿透的方式有多种，我们用的是FRP来实现。FRP(Fast Reverse Proxy)就是一个反向代理软件，它体积轻量但功能很强大，可以<strong>使处于内网或防火墙后的设备对外界提供服务</strong>，它支持HTTP、TCP、UDP等众多协议。我们今天仅讨论TCP和UDP相关的内容。</p>
 <p>FRP结构很简单，分为frps和frpc两个可执行程序。<strong>在公网服务器上运行frps，在内网机器上运行frpc</strong>即可。</p>
@@ -74,7 +74,7 @@
 <li>一个用于从外面的网络访问实验室机器时，内网机器所开放的端口(下图中为7777)。</li>
 </ol>
 <p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E9%98%BF%E9%87%8C%E4%BA%91%E7%AB%AF%E5%8F%A3.png"></p>
-<h1 id="2-免密连接服务器"><a href="#2-免密连接服务器" class="headerlink" title="2 免密连接服务器"></a>2 免密连接服务器</h1><p>由于每次ssh连接服务器时都需要输入密码，因此，如果能够保证安全又想节省时间的情况的话，通过以下操作可去掉每次都要输入密码的时间，实现免密连接。</p>
+<h1 id="2-免密连接服务器"><a href="#2-免密连接服务器" class="headerlink" title="2 免密连接服务器"></a>2 免密连接服务器</h1><p>由于每次ssh连接服务器时都需要输入密码，因此，如果能够保证安全又想节省时间的话，通过以下操作可去掉每次都要输入密码的环节，实现免密连接。</p>
 <p>在<strong>本地机器</strong>创建密钥，一路回车：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096</span><br></pre></td></tr></table></figure>
 
@@ -125,11 +125,11 @@
 <h1 id="5-后台运行FRP"><a href="#5-后台运行FRP" class="headerlink" title="5 后台运行FRP"></a>5 后台运行FRP</h1><h2 id="5-1-公网服务器端"><a href="#5-1-公网服务器端" class="headerlink" title="5.1 公网服务器端"></a>5.1 公网服务器端</h2><p>首先，在<strong>公网服务器端后台运行frps</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nohup .&#x2F;frps -c .&#x2F;frps.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
-<p>输入<code>jobs</code>命令，若看到进程状态是Running，即frps进程运行成功。</p>
+<p>输入<code>jobs</code>命令，若看到进程状态是Running，则表示ffrps进程运行成功。</p>
 <h2 id="5-2-内网机器端"><a href="#5-2-内网机器端" class="headerlink" title="5.2 内网机器端"></a>5.2 内网机器端</h2><p>其次，在<strong>内网机器端后台运行frpc</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nohup .&#x2F;frpc -c .&#x2F;frpc.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
-<p>输入<code>jobs</code>命令，若看到进程状态是Running，即frpc进程运行成功。</p>
+<p>输入<code>jobs</code>命令，若看到进程状态是Running，则表示frpc进程运行成功。</p>
 <h1 id="6-访问内网"><a href="#6-访问内网" class="headerlink" title="6 访问内网"></a>6 访问内网</h1><p>最后一步，通过外网机器访问内网机器。在<strong>本地</strong>命令行窗口输入：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 7777 实验室机器用户名@47.106.232.139</span><br></pre></td></tr></table></figure>
 
