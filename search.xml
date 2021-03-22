@@ -89,7 +89,8 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir ~&#x2F;.ssh</span><br><span class="line">cat ~&#x2F;tmp.pub &gt;&gt; ~&#x2F;.ssh&#x2F;authorized_keys</span><br><span class="line">rm ~&#x2F;tmp.pub</span><br></pre></td></tr></table></figure>
 
 <p><strong>退出服务器</strong>，再ssh连接，发现不需要密码了，成功。</p>
-<h1 id="3-FRP服务器端"><a href="#3-FRP服务器端" class="headerlink" title="3 FRP服务器端"></a>3 FRP服务器端</h1><p>ssh连接阿里云服务器：</p>
+<h1 id="3-FRP服务器端"><a href="#3-FRP服务器端" class="headerlink" title="3 FRP服务器端"></a>3 FRP服务器端</h1><p>阿里云服务器上面的命令行非常非常难用，执行命令很慢，而且用Vim按Esc的时候，只能把光标”移开”(具体效果不知道怎么描述)，根本没办法进入命令模式，所以千万不要用上面的shell，直接在本地用ssh连接阿里云服务器，用本地的终端操作即可。</p>
+<p>ssh连接阿里云服务器：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh root@47.106.232.139</span><br></pre></td></tr></table></figure>
 
 <p>在公网服务器端下载FRP并解压，此处下载0.36.1版本：</p>
@@ -135,13 +136,14 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 7777 实验室机器用户名@47.106.232.139</span><br></pre></td></tr></table></figure>
 
 <p>不出意外的话，输入密码就连接成功啦。</p>
+<p>之后如果想要免密登录的话，就和第2节的操作类似，区别就是ssh的时候记得加上<code>-p 端口号</code>，scp的时候记得加上<code>-P 端口号</code>即可。</p>
 <h1 id="7-传输文件"><a href="#7-传输文件" class="headerlink" title="7 传输文件"></a>7 传输文件</h1><h2 id="7-1-从服务器下载文件至本地"><a href="#7-1-从服务器下载文件至本地" class="headerlink" title="7.1 从服务器下载文件至本地"></a>7.1 从服务器下载文件至本地</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 7777 实验室机器用户名@47.106.232.139:文件绝对路径 本地存放目录路径</span><br></pre></td></tr></table></figure>
 
 <h2 id="7-2-从本地上传文件至服务器"><a href="#7-2-从本地上传文件至服务器" class="headerlink" title="7.2 从本地上传文件至服务器"></a>7.2 从本地上传文件至服务器</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 7777 本地文件路径 实验室机器用户名@47.106.232.139:存放目录绝对路径 </span><br></pre></td></tr></table></figure>
 
 <h2 id="7-3-细节"><a href="#7-3-细节" class="headerlink" title="7.3 细节"></a>7.3 细节</h2><ol>
-<li><code>scp</code>命令中指定端口号用的是-P参数(P大写)，<code>ssh</code>建立远程连接命令中指定端口号用的是-p参数(p小写)；</li>
-<li>如果传输的是文件夹，就加-r参数。</li>
+<li><code>scp</code>命令中指定端口号用的是<code>-P</code>参数(P大写)，<code>ssh</code>建立远程连接命令中指定端口号用的是<code>-p</code>参数(p小写)；</li>
+<li>如果传输的是文件夹，就加<code>-r</code>参数。</li>
 </ol>
 <h1 id="8-过程中遇到的问题"><a href="#8-过程中遇到的问题" class="headerlink" title="8 过程中遇到的问题"></a>8 过程中遇到的问题</h1><h2 id="8-1-防火墙"><a href="#8-1-防火墙" class="headerlink" title="8.1 防火墙"></a>8.1 防火墙</h2><p>在公网服务器端运行frps，报no route to host的错误。这种错误是由于公网服务器端的防火墙没有关闭引起的。因此，在公网服务器端输入以下命令：</p>
 <p>查看防火墙状态</p>
