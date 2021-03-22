@@ -62,7 +62,8 @@
 <p>一开始，A同学先用他自己已经租了的阿里云服务器配置好了一遍内网穿透。而我这几天也租(免费试用)了一个来玩玩，所以也想尝试下自己搭一下内网穿透。</p>
 <a id="more"></a>
 
-<h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1 环境配置"></a>1 环境配置</h1><h2 id="1-1-公网VPS"><a href="#1-1-公网VPS" class="headerlink" title="1.1 公网VPS"></a>1.1 公网VPS</h2><p>实现内网穿透需要有一台固定IP的公网VPS，可用它作为跳板访问内网端口，而这台具有固定IP的公网VPS就是我目前已经在阿里云上配置好的公网服务器。</p>
+<h1 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1 环境配置"></a>1 环境配置</h1><p>为了减少多个IP、多个端口号在阐述时可能造成的误会，下面的例子都以真实场景的IP和端口号举例，除了屏蔽实验室机器用户名以保护同学的实验室的隐私。由于阿里云服务器只是试用一个月，后续大概率不会续费这个服务器，所以暴露服务器IP无大碍。</p>
+<h2 id="1-1-公网VPS"><a href="#1-1-公网VPS" class="headerlink" title="1.1 公网VPS"></a>1.1 公网VPS</h2><p>实现内网穿透需要有一台固定IP的公网VPS，可用它作为跳板访问内网端口，而这台具有固定IP的公网VPS就是我目前已经在阿里云上配置好的公网服务器。</p>
 <p>在阿里云控制台上查询到我租的公网服务器的<strong>公网IP</strong>为47.106.232.139：</p>
 <p><img data-src="/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91IP.png"></p>
 <h2 id="1-2-FRP"><a href="#1-2-FRP" class="headerlink" title="1.2 FRP"></a>1.2 FRP</h2><p>实现内网穿透的方式有多种，我们用的是FRP来实现。FRP(Fast Reverse Proxy)就是一个反向代理软件，它体积轻量但功能很强大，可以<strong>使处于内网或防火墙后的设备对外界提供服务</strong>，它支持HTTP、TCP、UDP等众多协议。我们今天仅讨论TCP和UDP相关的内容。</p>
@@ -134,7 +135,15 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 7777 实验室机器用户名@47.106.232.139</span><br></pre></td></tr></table></figure>
 
 <p>不出意外的话，输入密码就连接成功啦。</p>
-<h1 id="7-过程中遇到的问题"><a href="#7-过程中遇到的问题" class="headerlink" title="7 过程中遇到的问题"></a>7 过程中遇到的问题</h1><h2 id="7-1-防火墙"><a href="#7-1-防火墙" class="headerlink" title="7.1 防火墙"></a>7.1 防火墙</h2><p>在公网服务器端运行frps，报no route to host的错误。这种错误是由于公网服务器端的防火墙没有关闭引起的。因此，在公网服务器端输入以下命令：</p>
+<h1 id="7-传输文件"><a href="#7-传输文件" class="headerlink" title="7 传输文件"></a>7 传输文件</h1><h2 id="7-1-从服务器下载文件至本地"><a href="#7-1-从服务器下载文件至本地" class="headerlink" title="7.1 从服务器下载文件至本地"></a>7.1 从服务器下载文件至本地</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 7777 实验室机器用户名@47.106.232.139:文件绝对路径 本地存放目录路径</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-2-从本地上传文件至服务器"><a href="#7-2-从本地上传文件至服务器" class="headerlink" title="7.2 从本地上传文件至服务器"></a>7.2 从本地上传文件至服务器</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 7777 本地文件路径 实验室机器用户名@47.106.232.139:存放目录绝对路径 </span><br></pre></td></tr></table></figure>
+
+<h2 id="7-3-细节"><a href="#7-3-细节" class="headerlink" title="7.3 细节"></a>7.3 细节</h2><ol>
+<li><code>scp</code>命令中指定端口号用的是-P参数(P大写)，<code>ssh</code>建立远程连接命令中指定端口号用的是-p参数(p小写)；</li>
+<li>如果传输的是文件夹，就加-r参数。</li>
+</ol>
+<h1 id="8-过程中遇到的问题"><a href="#8-过程中遇到的问题" class="headerlink" title="8 过程中遇到的问题"></a>8 过程中遇到的问题</h1><h2 id="8-1-防火墙"><a href="#8-1-防火墙" class="headerlink" title="8.1 防火墙"></a>8.1 防火墙</h2><p>在公网服务器端运行frps，报no route to host的错误。这种错误是由于公网服务器端的防火墙没有关闭引起的。因此，在公网服务器端输入以下命令：</p>
 <p>查看防火墙状态</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
 
@@ -145,7 +154,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl disable firewalld.service </span><br></pre></td></tr></table></figure>
 
 <p>问题解决。</p>
-<h2 id="7-2-端口占用"><a href="#7-2-端口占用" class="headerlink" title="7.2 端口占用"></a>7.2 端口占用</h2><p>由于一开始不太懂得怎么操作，所以有时候会把某一个端口开了之后，又在相同的端口上运行了其他进程，故会报Error starting userland proxy: listen tcp 0.0.0.0:xxxx: bind: address already in use的错误。这种情况下，需要先查看当前机器的端口占用情况，然后把端口进程杀死即可。</p>
+<h2 id="8-2-端口占用"><a href="#8-2-端口占用" class="headerlink" title="8.2 端口占用"></a>8.2 端口占用</h2><p>由于一开始不太懂得怎么操作，所以有时候会把某一个端口开了之后，又在相同的端口上运行了其他进程，故会报Error starting userland proxy: listen tcp 0.0.0.0:xxxx: bind: address already in use的错误。这种情况下，需要先查看当前机器的端口占用情况，然后把端口进程杀死即可。</p>
 <p>查看端口占用情况：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -tanlp</span><br></pre></td></tr></table></figure>
 
