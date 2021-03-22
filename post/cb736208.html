@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%85%AC%E7%BD%91frps.png">
 <meta property="og:image" content="http://example.com/images/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/%E5%86%85%E7%BD%91frpc.png">
 <meta property="article:published_time" content="2021-03-20T21:26:28.000Z">
-<meta property="article:modified_time" content="2021-03-22T07:19:12.623Z">
+<meta property="article:modified_time" content="2021-03-22T16:47:06.962Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="FRP">
 <meta name="twitter:card" content="summary">
@@ -229,7 +229,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-22 15:19:12" itemprop="dateModified" datetime="2021-03-22T15:19:12+08:00">2021-03-22</time>
+                <time title="Modified: 2021-03-23 00:47:06" itemprop="dateModified" datetime="2021-03-23T00:47:06+08:00">2021-03-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -335,7 +335,7 @@
 <h1 id="5-后台运行FRP"><a href="#5-后台运行FRP" class="headerlink" title="5 后台运行FRP"></a>5 后台运行FRP</h1><h2 id="5-1-公网服务器端"><a href="#5-1-公网服务器端" class="headerlink" title="5.1 公网服务器端"></a>5.1 公网服务器端</h2><p>首先，在<strong>公网服务器端后台运行frps</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup .&#x2F;frps -c .&#x2F;frps.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
-<p>输入<code>jobs</code>命令，若看到进程状态是Running，则表示ffrps进程运行成功。</p>
+<p>输入<code>jobs</code>命令，若看到进程状态是Running，则表示frps进程运行成功。</p>
 <h2 id="5-2-内网机器端"><a href="#5-2-内网机器端" class="headerlink" title="5.2 内网机器端"></a>5.2 内网机器端</h2><p>其次，在<strong>内网机器端后台运行frpc</strong>。目录定位到当前frp文件夹，在命令行中输入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup .&#x2F;frpc -c .&#x2F;frpc.ini &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
