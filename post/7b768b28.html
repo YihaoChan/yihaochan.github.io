@@ -29,7 +29,7 @@
 <meta property="og:description" content="1 背景LeetCode第389题-找不同： 给定两个字符串 s 和 t，它们只包含小写字母。字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。请找出在 t 中被添加的字母。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-04-17T04:15:46.000Z">
-<meta property="article:modified_time" content="2021-04-17T08:04:58.896Z">
+<meta property="article:modified_time" content="2021-04-17T08:06:20.539Z">
 <meta property="article:author" content="Yihao Chan">
 <meta name="twitter:card" content="summary">
 
@@ -217,7 +217,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-17 12:15:46 / Modified: 16:04:58" itemprop="dateCreated datePublished" datetime="2021-04-17T12:15:46+08:00">2021-04-17</time>
+              <time title="Created: 2021-04-17 12:15:46 / Modified: 16:06:20" itemprop="dateCreated datePublished" datetime="2021-04-17T12:15:46+08:00">2021-04-17</time>
             </span>
 
           <br>
@@ -268,7 +268,7 @@
 <li>s 和 t 只包含小写字母</li>
 </ul>
 <p>解法之一可以将字符串s和字符串t拼接起来，之后对拼接后的字符串的每个字符进行<strong>异或</strong>运算，从而找到多余的那个字符。此处的异或运算的技巧应用可见<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/single-number/">LeetCode第136题-只出现一次的数字</a>。</p>
-<h2 id="2-字符串拼接"><a href="#2-字符串拼接" class="headerlink" title="2 字符串拼接"></a>2 字符串拼接</h2><p>将两个字符串拼接最简单的方法就是用<code>+</code>符号，但是效率很低，因为Java中对String对象进行<code>+</code>的操作实际上是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
+<h1 id="2-字符串拼接"><a href="#2-字符串拼接" class="headerlink" title="2 字符串拼接"></a>2 字符串拼接</h1><p>将两个字符串拼接最简单的方法就是用<code>+</code>符号，但是效率很低，因为Java中对String对象进行<code>+</code>的操作实际上是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
 <p>因此，可考虑用<strong>StringBuilder</strong>和<strong>StringBuffer</strong>两个类进行字符串拼接的操作，用法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
 
@@ -276,14 +276,14 @@
 
 <p>先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，是<strong>线程安全</strong>的。</p>
 <p>使用+号进行拼接字符串时，会创建了多个StringBuilder对象，而使用StringBuffer或StringBuilder的话，至始至终只有一个对象。</p>
-<h2 id="3-字符位运算"><a href="#3-字符位运算" class="headerlink" title="3 字符位运算"></a>3 字符位运算</h2><h3 id="3-1-错误解法"><a href="#3-1-错误解法" class="headerlink" title="3.1 错误解法"></a>3.1 错误解法</h3><p>回归这道题，根据位运算解法，一开始我的思路是：初始化一个char类型的数据为<strong>空格</strong>，之后遍历拼接后的字符串中的每个字符，不断进行位运算，遍历结束后得到的就是答案。后来发现本来应该输出小写的e，结果输出了大写的E。自己测试的代码如下：</p>
+<h1 id="3-字符位运算"><a href="#3-字符位运算" class="headerlink" title="3 字符位运算"></a>3 字符位运算</h1><h2 id="3-1-错误解法"><a href="#3-1-错误解法" class="headerlink" title="3.1 错误解法"></a>3.1 错误解法</h2><p>回归这道题，根据位运算解法，一开始我的思路是：初始化一个char类型的数据为<strong>空格</strong>，之后遍历拼接后的字符串中的每个字符，不断进行位运算，遍历结束后得到的就是答案。后来发现本来应该输出小写的e，结果输出了大写的E。自己测试的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    char res &#x3D; &#39; &#39;;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(res); &#x2F;&#x2F; E</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>分析：当res一直异或到abcdabcd时，由于abcdabcd相互异或的结果为0，因此此时的res为空格，ASCII码为32（0010 0000）。而空格和小写e异或的结果为：0010 0000 ^ 0110 0101 = 0100 0101，这个值为大写E的ASCII码。因此，如果res初始时为空格，一直进行异或操作的话会得到错误结果。如果想要得到正确的结果，那么res应该初始化为<strong>NULL（ASCII码为0000 0000）</strong>，而任意数和0异或的结果都等于这个数本身，这样子才不会影响异或运算的结果。</p>
-<h3 id="3-2-正确解法"><a href="#3-2-正确解法" class="headerlink" title="3.2 正确解法"></a>3.2 正确解法</h3><p>然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的<strong>ASCII码</strong>进行异或运算，这样res初始化时就可以用0表示空。</p>
+<h2 id="3-2-正确解法"><a href="#3-2-正确解法" class="headerlink" title="3.2 正确解法"></a>3.2 正确解法</h2><p>然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的<strong>ASCII码</strong>进行异或运算，这样res初始化时就可以用0表示空。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    int res &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; (int) stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println((char) res); &#x2F;&#x2F; e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h2><ol>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><ol>
 <li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；</li>
 <li>char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。</li>
 </ol>
@@ -368,7 +368,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="nav-text">2 字符串拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-text">3 字符位运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%94%99%E8%AF%AF%E8%A7%A3%E6%B3%95"><span class="nav-text">3.1 错误解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%B3%95"><span class="nav-text">3.2 正确解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-text">4 总结</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="nav-text">2 字符串拼接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-text">3 字符位运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E9%94%99%E8%AF%AF%E8%A7%A3%E6%B3%95"><span class="nav-text">3.1 错误解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%B3%95"><span class="nav-text">3.2 正确解法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-text">4 总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
