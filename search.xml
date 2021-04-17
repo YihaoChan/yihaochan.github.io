@@ -1,6 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>LeetCode第389题 &amp; Java字符位运算</title>
+    <url>/post/7b768b28.html</url>
+    <content><![CDATA[<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p><a href="https://leetcode-cn.com/problems/find-the-difference/">LeetCode第389题-找不同</a>：</p>
+<p>给定两个字符串 s 和 t，它们只包含小写字母。<br>字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。<br>请找出在 t 中被添加的字母。</p>
+<a id="more"></a>
+
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;abcd&quot;, t &#x3D; &quot;abcde&quot;</span><br><span class="line">输出：&quot;e&quot;</span><br><span class="line">解释：&#39;e&#39; 是那个被添加的字母。</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;&quot;, t &#x3D; &quot;y&quot;</span><br><span class="line">输出：&quot;y&quot;</span><br></pre></td></tr></table></figure>
+
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;a&quot;, t &#x3D; &quot;aa&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
+
+<p>示例 4：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;ae&quot;, t &#x3D; &quot;aea&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
+
+<p>提示：</p>
+<ul>
+<li>0 &lt;= s.length &lt;= 1000</li>
+<li>t.length == s.length + 1</li>
+<li>s 和 t 只包含小写字母</li>
+</ul>
+<p>解法之一可以将字符串s和字符串t拼接起来，之后对拼接后的字符串的每个字符进行<strong>异或</strong>运算，从而找到多余的那个字符。此处的异或运算的技巧应用可见<a href="https://leetcode-cn.com/problems/single-number/">LeetCode第136题-只出现一次的数字</a>。</p>
+<h1 id="2-字符串拼接"><a href="#2-字符串拼接" class="headerlink" title="2 字符串拼接"></a>2 字符串拼接</h1><p>将两个字符串拼接最简单的方法就是用<code>+</code>符号，但是效率很低，因为Java中对String对象进行<code>+</code>的操作实际上是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
+<p>因此，可考虑用<strong>StringBuilder</strong>和<strong>StringBuffer</strong>两个类进行字符串拼接的操作，用法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">StringBuilder stringBuilder &#x3D; new StringBuilder().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，是<strong>线程安全</strong>的。</p>
+<p>使用+号进行拼接字符串时，会创建了多个StringBuilder对象，而使用StringBuffer或StringBuilder的话，至始至终只有一个对象。</p>
+<h1 id="3-字符位运算"><a href="#3-字符位运算" class="headerlink" title="3 字符位运算"></a>3 字符位运算</h1><h2 id="3-1-错误解法"><a href="#3-1-错误解法" class="headerlink" title="3.1 错误解法"></a>3.1 错误解法</h2><p>回归这道题，根据位运算解法，一开始我的思路是：初始化一个char类型的数据为<strong>空格</strong>，之后遍历拼接后的字符串中的每个字符，不断进行位运算，遍历结束后得到的就是答案。后来发现本来应该输出小写的e，结果输出了大写的E。自己测试的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    char res &#x3D; &#39; &#39;;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(res); &#x2F;&#x2F; E</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析：当res一直异或到abcdabcd时，由于abcdabcd相互异或的结果为0，因此此时的res为空格，ASCII码为32（0010 0000）。而空格和小写e异或的结果为：0010 0000 ^ 0110 0101 = 0100 0101，这个值为大写E的ASCII码。因此，如果res初始时为空格，一直进行异或操作的话会得到错误结果。如果想要得到正确的结果，那么res应该初始化为<strong>NULL（ASCII码为0000 0000）</strong>，而任意数和0异或的结果都等于这个数本身，这样子才不会影响异或运算的结果。</p>
+<h2 id="3-2-正确解法"><a href="#3-2-正确解法" class="headerlink" title="3.2 正确解法"></a>3.2 正确解法</h2><p>然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的<strong>ASCII码</strong>进行异或运算，这样res初始化时就可以用0表示空。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    int res &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; (int) stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println((char) res); &#x2F;&#x2F; e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><ol>
+<li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程场景下的操作；</li>
+<li>char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>Vim的系统剪贴板的奇妙发现</title>
+    <url>/post/10c2209c.html</url>
+    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
+<a id="more"></a>
+
+<p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
+<h2 id="1-查看Vim是否支持系统剪贴板"><a href="#1-查看Vim是否支持系统剪贴板" class="headerlink" title="1. 查看Vim是否支持系统剪贴板"></a>1. 查看Vim是否支持系统剪贴板</h2><p>在终端中输入<code>vim --version | grep clipboard</code>，观察<strong>clipboard</strong>选项前的符号：如果为 <strong>-</strong> 号，说明当前的Vim不支持系统剪贴板，需要先在终端执行<code>sudo apt install vim-gnome</code>，之后再次执行<code>vim --version | grep clipboard</code>，可以看到<strong>clipboard</strong>选项前的符号为 <strong>+</strong> 号，表示当前的Vim已经支持系统剪贴板。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png"></p>
+<h2 id="2-查看Linux系统的系统剪贴板内容"><a href="#2-查看Linux系统的系统剪贴板内容" class="headerlink" title="2. 查看Linux系统的系统剪贴板内容"></a>2. 查看Linux系统的系统剪贴板内容</h2><p>执行<code>sudo apt install xclip</code>安装xclip，再执行<code>xclip -o</code>命令，就可以查看当前Linux系统的系统剪贴板内容。</p>
+<p>e.g. 在终端上打印一串字符：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png"></p>
+<p>然后用鼠标选中，按下<code>ctrl + shift + c</code>复制：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png"></p>
+<p>执行<code>xclip -o</code>命令查看系统剪贴板内容：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png"></p>
+<p>此时可以看到，用户手动复制到了Linux的系统剪贴板的内容已经通过<code>xclip -o</code>成功显示。</p>
+<h2 id="3-通过Vim的系统剪贴板将内容复制到Vim以外的地方"><a href="#3-通过Vim的系统剪贴板将内容复制到Vim以外的地方" class="headerlink" title="3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方"></a>3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</h2><p>使用Vim打开任意一个文件，按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，执行<code>:reg</code>查看Vim的寄存器，可以看到Vim的系统剪贴板寄存器(“+寄存器)已存放我们刚才复制的一整行内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
+<p>之后<strong>不要退出</strong>Vim窗口，打开任意一个Vim以外的地方，快捷键<code>ctrl + v</code>，可以看到在Vim中复制的内容已经粘贴到Vim以外的地方。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
+<p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
+<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印(Test for system clipboard.)并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
+<p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再在终端按下快捷键<code>ctrl + shift +v</code>，什么都没有。但是执行<code>xclip -o</code>却还是查看到了之前我手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
+<p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
+<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也<strong>没有归还</strong>Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
+<h2 id="6-尝试将内容复制到Linux的系统粘贴板"><a href="#6-尝试将内容复制到Linux的系统粘贴板" class="headerlink" title="6. 尝试将内容复制到Linux的系统粘贴板"></a>6. 尝试将内容复制到Linux的系统粘贴板</h2><p>那么，如何真正做到在Vim中复制内容之后，即使在将Vim关闭之后，也能在其他地方粘贴呢？</p>
+<h3 id="6-1-尝试1：进入Vim的可视模式"><a href="#6-1-尝试1：进入Vim的可视模式" class="headerlink" title="6.1 尝试1：进入Vim的可视模式"></a>6.1 尝试1：进入Vim的可视模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>v</code>进入可视模式。按左右方向键对字符进行选中，再按下y键进行复制。关闭Vim，敲下粘贴快捷键，<strong>一片空白。</strong></p>
+<p>结论：可视模式无法将Vim中的内容复制到Linux的系统剪贴板。</p>
+<h3 id="6-2-尝试2：让Vim进程进入后台"><a href="#6-2-尝试2：让Vim进程进入后台" class="headerlink" title="6.2 尝试2：让Vim进程进入后台"></a>6.2 尝试2：让Vim进程进入后台</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，按下Linux系统快捷键<code>ctrl + z</code>将Vim进程放到后台。此时Vim进程已经被放到后台，并处于suspended(暂停)状态。</p>
+<p>执行<code>bg %1</code>命令让Vim进程在后台运行，可以看到Vim进程在continued状态之后还是切换到了suspended状态，执行<code>jobs</code>命令，Vim进程还是处于suspended状态。在任意一处按下Linux系统的粘贴快捷键，依旧是<strong>一片空白。</strong></p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%B0%86Vim%E6%94%BE%E5%88%B0%E5%90%8E%E5%8F%B0bg.png"></p>
+<p>结论：将Vim进程放到后台，只能让Vim处于suspended状态，且无法让在Vim中的复制到Vim的系统剪贴板的内容进入Linux的系统剪贴板。</p>
+<h3 id="6-3-尝试3：进入Vim的插入模式"><a href="#6-3-尝试3：进入Vim的插入模式" class="headerlink" title="6.3 尝试3：进入Vim的插入模式"></a>6.3 尝试3：进入Vim的插入模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>i</code>进入插入模式。用<strong>鼠标</strong>手动选中内容，并按下Linux系统的复制快捷键<code>ctrl + shift + c</code>复制。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6.png"></p>
+<p>关闭Vim，敲下Linux的粘贴快捷键，<strong>成功</strong>将Vim中内容复制到Vim以外。此时执行<code>xclip -o</code>命令，可以看到Linux的系统剪贴板也显示我们在Vim中通过插入模式用鼠标选中并复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6-%E5%85%B3%E6%8E%89%E5%90%8E%E7%B2%98%E8%B4%B4.png"></p>
+<p>结论：要想在关掉VIm之后，将在Vim中复制的内容送到Linux的系统剪贴板，需要在Vim中切换到插入模式，并用鼠标手动选中内容，再按下Linux系统的复制快捷键。之后即使关掉Vim，也能将内容粘贴到任意地方。<strong>但是</strong>，这不就违背了Vim的核心思想——“只通过键盘操作，解放鼠标操作”了吗？(滑稽)。</p>
+<p>或许有人会说：在不关掉Vim的时候进行粘贴不就好了嘛。假设我需要把这部分复制的内容粘贴很多次，而且并非同时粘贴，可能是间断性不定时地粘贴，那么如果采用Vim的”系统”剪贴板进行复制粘贴的话，就意味着我需要一直开着这个Vim进程，不能人为/意外地关闭它。对于我这种强迫症来说，是接受不了的。对于不会用到的东西/进程，我一定选择丢弃~</p>
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。如果真要在关闭Vim之后还能获得在Vim中复制的内容，办法就是切换到Vim的插入模式，用鼠标进行选中和复制，之后不管关闭Vim与否，都可以进行粘贴。</p>
+<p>至于我们的猜想到底对不对，等我有能力读懂Vim的源代码之后再下定论。</p>
+]]></content>
+      <categories>
+        <category>Operation System</category>
+      </categories>
+      <tags>
+        <tag>Vim</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>记一次内网穿透</title>
     <url>/post/cb736208.html</url>
     <content><![CDATA[<h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>最近和同学在做大数据比赛，需要用到GPU服务器加速模型训练。而自己在家里，没有服务器资源可用。另一位同学在学校，他们的实验室有服务器，且可以(偷偷)拿来跑比赛要用的模型，但是只能用校园网才能连上。而我又需要经常用到服务器，总是发给他们跑也怪麻烦的，所以想到了一个办法——内网穿透。通过内网穿透，就可以实现从我自己(校外)的机器访问到校园内的实验室机器。此处特别感谢两位技术宅同学想到了这个办法！</p>
@@ -118,108 +220,6 @@
       </categories>
       <tags>
         <tag>FRP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode第389题 &amp; Java字符位运算</title>
-    <url>/post/7b768b28.html</url>
-    <content><![CDATA[<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p><a href="https://leetcode-cn.com/problems/find-the-difference/">LeetCode第389题-找不同</a>：</p>
-<p>给定两个字符串 s 和 t，它们只包含小写字母。<br>字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。<br>请找出在 t 中被添加的字母。</p>
-<a id="more"></a>
-
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;abcd&quot;, t &#x3D; &quot;abcde&quot;</span><br><span class="line">输出：&quot;e&quot;</span><br><span class="line">解释：&#39;e&#39; 是那个被添加的字母。</span><br></pre></td></tr></table></figure>
-
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;&quot;, t &#x3D; &quot;y&quot;</span><br><span class="line">输出：&quot;y&quot;</span><br></pre></td></tr></table></figure>
-
-<p>示例 3：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;a&quot;, t &#x3D; &quot;aa&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
-
-<p>示例 4：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：s &#x3D; &quot;ae&quot;, t &#x3D; &quot;aea&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
-
-<p>提示：</p>
-<ul>
-<li>0 &lt;= s.length &lt;= 1000</li>
-<li>t.length == s.length + 1</li>
-<li>s 和 t 只包含小写字母</li>
-</ul>
-<p>解法之一可以将字符串s和字符串t拼接起来，之后对拼接后的字符串的每个字符进行<strong>异或</strong>运算，从而找到多余的那个字符。此处的异或运算的技巧应用可见<a href="https://leetcode-cn.com/problems/single-number/">LeetCode第136题-只出现一次的数字</a>。</p>
-<h1 id="2-字符串拼接"><a href="#2-字符串拼接" class="headerlink" title="2 字符串拼接"></a>2 字符串拼接</h1><p>将两个字符串拼接最简单的方法就是用<code>+</code>符号，但是效率很低，因为Java中对String对象进行<code>+</code>的操作实际上是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
-<p>因此，可考虑用<strong>StringBuilder</strong>和<strong>StringBuffer</strong>两个类进行字符串拼接的操作，用法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">StringBuilder stringBuilder &#x3D; new StringBuilder().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，是<strong>线程安全</strong>的。</p>
-<p>使用+号进行拼接字符串时，会创建了多个StringBuilder对象，而使用StringBuffer或StringBuilder的话，至始至终只有一个对象。</p>
-<h1 id="3-字符位运算"><a href="#3-字符位运算" class="headerlink" title="3 字符位运算"></a>3 字符位运算</h1><h2 id="3-1-错误解法"><a href="#3-1-错误解法" class="headerlink" title="3.1 错误解法"></a>3.1 错误解法</h2><p>回归这道题，根据位运算解法，一开始我的思路是：初始化一个char类型的数据为<strong>空格</strong>，之后遍历拼接后的字符串中的每个字符，不断进行位运算，遍历结束后得到的就是答案。后来发现本来应该输出小写的e，结果输出了大写的E。自己测试的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    char res &#x3D; &#39; &#39;;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(res); &#x2F;&#x2F; E</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>分析：当res一直异或到abcdabcd时，由于abcdabcd相互异或的结果为0，因此此时的res为空格，ASCII码为32（0010 0000）。而空格和小写e异或的结果为：0010 0000 ^ 0110 0101 = 0100 0101，这个值为大写E的ASCII码。因此，如果res初始时为空格，一直进行异或操作的话会得到错误结果。如果想要得到正确的结果，那么res应该初始化为<strong>NULL（ASCII码为0000 0000）</strong>，而任意数和0异或的结果都等于这个数本身，这样子才不会影响异或运算的结果。</p>
-<h2 id="3-2-正确解法"><a href="#3-2-正确解法" class="headerlink" title="3.2 正确解法"></a>3.2 正确解法</h2><p>然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的<strong>ASCII码</strong>进行异或运算，这样res初始化时就可以用0表示空。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    int res &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; (int) stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println((char) res); &#x2F;&#x2F; e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><ol>
-<li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；</li>
-<li>char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>Vim的系统剪贴板的奇妙发现</title>
-    <url>/post/10c2209c.html</url>
-    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
-<a id="more"></a>
-
-<p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
-<h2 id="1-查看Vim是否支持系统剪贴板"><a href="#1-查看Vim是否支持系统剪贴板" class="headerlink" title="1. 查看Vim是否支持系统剪贴板"></a>1. 查看Vim是否支持系统剪贴板</h2><p>在终端中输入<code>vim --version | grep clipboard</code>，观察<strong>clipboard</strong>选项前的符号：如果为 <strong>-</strong> 号，说明当前的Vim不支持系统剪贴板，需要先在终端执行<code>sudo apt install vim-gnome</code>，之后再次执行<code>vim --version | grep clipboard</code>，可以看到<strong>clipboard</strong>选项前的符号为 <strong>+</strong> 号，表示当前的Vim已经支持系统剪贴板。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png"></p>
-<h2 id="2-查看Linux系统的系统剪贴板内容"><a href="#2-查看Linux系统的系统剪贴板内容" class="headerlink" title="2. 查看Linux系统的系统剪贴板内容"></a>2. 查看Linux系统的系统剪贴板内容</h2><p>执行<code>sudo apt install xclip</code>安装xclip，再执行<code>xclip -o</code>命令，就可以查看当前Linux系统的系统剪贴板内容。</p>
-<p>e.g. 在终端上打印一串字符：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png"></p>
-<p>然后用鼠标选中，按下<code>ctrl + shift + c</code>复制：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png"></p>
-<p>执行<code>xclip -o</code>命令查看系统剪贴板内容：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png"></p>
-<p>此时可以看到，用户手动复制到了Linux的系统剪贴板的内容已经通过<code>xclip -o</code>成功显示。</p>
-<h2 id="3-通过Vim的系统剪贴板将内容复制到Vim以外的地方"><a href="#3-通过Vim的系统剪贴板将内容复制到Vim以外的地方" class="headerlink" title="3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方"></a>3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</h2><p>使用Vim打开任意一个文件，按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，执行<code>:reg</code>查看Vim的寄存器，可以看到Vim的系统剪贴板寄存器(“+寄存器)已存放我们刚才复制的一整行内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
-<p>之后<strong>不要退出</strong>Vim窗口，打开任意一个Vim以外的地方，快捷键<code>ctrl + v</code>，可以看到在Vim中复制的内容已经粘贴到Vim以外的地方。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
-<p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
-<p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
-<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印(Test for system clipboard.)并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
-<p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
-<p>在Vim中执行<code>:wq</code>退出Vim窗口，再在终端按下快捷键<code>ctrl + shift +v</code>，什么都没有。但是执行<code>xclip -o</code>却还是查看到了之前我手动复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
-<h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
-<p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
-<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也<strong>没有归还</strong>Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
-<h2 id="6-尝试将内容复制到Linux的系统粘贴板"><a href="#6-尝试将内容复制到Linux的系统粘贴板" class="headerlink" title="6. 尝试将内容复制到Linux的系统粘贴板"></a>6. 尝试将内容复制到Linux的系统粘贴板</h2><p>那么，如何真正做到在Vim中复制内容之后，即使在将Vim关闭之后，也能在其他地方粘贴呢？</p>
-<h3 id="6-1-尝试1：进入Vim的可视模式"><a href="#6-1-尝试1：进入Vim的可视模式" class="headerlink" title="6.1 尝试1：进入Vim的可视模式"></a>6.1 尝试1：进入Vim的可视模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>v</code>进入可视模式。按左右方向键对字符进行选中，再按下y键进行复制。关闭Vim，敲下粘贴快捷键，<strong>一片空白。</strong></p>
-<p>结论：可视模式无法将Vim中的内容复制到Linux的系统剪贴板。</p>
-<h3 id="6-2-尝试2：让Vim进程进入后台"><a href="#6-2-尝试2：让Vim进程进入后台" class="headerlink" title="6.2 尝试2：让Vim进程进入后台"></a>6.2 尝试2：让Vim进程进入后台</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，按下Linux系统快捷键<code>ctrl + z</code>将Vim进程放到后台。此时Vim进程已经被放到后台，并处于suspended(暂停)状态。</p>
-<p>执行<code>bg %1</code>命令让Vim进程在后台运行，可以看到Vim进程在continued状态之后还是切换到了suspended状态，执行<code>jobs</code>命令，Vim进程还是处于suspended状态。在任意一处按下Linux系统的粘贴快捷键，依旧是<strong>一片空白。</strong></p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%B0%86Vim%E6%94%BE%E5%88%B0%E5%90%8E%E5%8F%B0bg.png"></p>
-<p>结论：将Vim进程放到后台，只能让Vim处于suspended状态，且无法让在Vim中的复制到Vim的系统剪贴板的内容进入Linux的系统剪贴板。</p>
-<h3 id="6-3-尝试3：进入Vim的插入模式"><a href="#6-3-尝试3：进入Vim的插入模式" class="headerlink" title="6.3 尝试3：进入Vim的插入模式"></a>6.3 尝试3：进入Vim的插入模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>i</code>进入插入模式。用<strong>鼠标</strong>手动选中内容，并按下Linux系统的复制快捷键<code>ctrl + shift + c</code>复制。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6.png"></p>
-<p>关闭Vim，敲下Linux的粘贴快捷键，<strong>成功</strong>将Vim中内容复制到Vim以外。此时执行<code>xclip -o</code>命令，可以看到Linux的系统剪贴板也显示我们在Vim中通过插入模式用鼠标选中并复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6-%E5%85%B3%E6%8E%89%E5%90%8E%E7%B2%98%E8%B4%B4.png"></p>
-<p>结论：要想在关掉VIm之后，将在Vim中复制的内容送到Linux的系统剪贴板，需要在Vim中切换到插入模式，并用鼠标手动选中内容，再按下Linux系统的复制快捷键。之后即使关掉Vim，也能将内容粘贴到任意地方。<strong>但是</strong>，这不就违背了Vim的核心思想——“只通过键盘操作，解放鼠标操作”了吗？(滑稽)。</p>
-<p>或许有人会说：在不关掉Vim的时候进行粘贴不就好了嘛。假设我需要把这部分复制的内容粘贴很多次，而且并非同时粘贴，可能是间断性不定时地粘贴，那么如果采用Vim的”系统”剪贴板进行复制粘贴的话，就意味着我需要一直开着这个Vim进程，不能人为/意外地关闭它。对于我这种强迫症来说，是接受不了的。对于不会用到的东西/进程，我一定选择丢弃~</p>
-<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。如果真要在关闭Vim之后还能获得在Vim中复制的内容，办法就是切换到Vim的插入模式，用鼠标进行选中和复制，之后不管关闭Vim与否，都可以进行粘贴。</p>
-<p>至于我们的猜想到底对不对，等我有能力读懂Vim的源代码之后再下定论。</p>
-]]></content>
-      <categories>
-        <category>Operation System</category>
-      </categories>
-      <tags>
-        <tag>Vim</tag>
       </tags>
   </entry>
   <entry>
