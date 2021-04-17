@@ -29,7 +29,7 @@
 <meta property="og:description" content="1 背景LeetCode第389题-找不同： 给定两个字符串 s 和 t，它们只包含小写字母。字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。请找出在 t 中被添加的字母。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-04-17T04:15:46.000Z">
-<meta property="article:modified_time" content="2021-04-17T07:56:23.778Z">
+<meta property="article:modified_time" content="2021-04-17T08:04:58.896Z">
 <meta property="article:author" content="Yihao Chan">
 <meta name="twitter:card" content="summary">
 
@@ -217,7 +217,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-17 12:15:46 / Modified: 15:56:23" itemprop="dateCreated datePublished" datetime="2021-04-17T12:15:46+08:00">2021-04-17</time>
+              <time title="Created: 2021-04-17 12:15:46 / Modified: 16:04:58" itemprop="dateCreated datePublished" datetime="2021-04-17T12:15:46+08:00">2021-04-17</time>
             </span>
 
           <br>
@@ -226,7 +226,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.1k</span>
+              <span>2.3k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -274,7 +274,7 @@
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder stringBuilder &#x3D; new StringBuilder().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br></pre></td></tr></table></figure>
 
-<p>先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，所以是线程安全的。</p>
+<p>先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，是<strong>线程安全</strong>的。</p>
 <p>使用+号进行拼接字符串时，会创建了多个StringBuilder对象，而使用StringBuffer或StringBuilder的话，至始至终只有一个对象。</p>
 <h2 id="3-字符位运算"><a href="#3-字符位运算" class="headerlink" title="3 字符位运算"></a>3 字符位运算</h2><h3 id="3-1-错误解法"><a href="#3-1-错误解法" class="headerlink" title="3.1 错误解法"></a>3.1 错误解法</h3><p>回归这道题，根据位运算解法，一开始我的思路是：初始化一个char类型的数据为<strong>空格</strong>，之后遍历拼接后的字符串中的每个字符，不断进行位运算，遍历结束后得到的就是答案。后来发现本来应该输出小写的e，结果输出了大写的E。自己测试的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    char res &#x3D; &#39; &#39;;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(res); &#x2F;&#x2F; E</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -283,6 +283,10 @@
 <h3 id="3-2-正确解法"><a href="#3-2-正确解法" class="headerlink" title="3.2 正确解法"></a>3.2 正确解法</h3><p>然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的<strong>ASCII码</strong>进行异或运算，这样res初始化时就可以用0表示空。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    int res &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; (int) stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println((char) res); &#x2F;&#x2F; e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h2><ol>
+<li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；</li>
+<li>char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。</li>
+</ol>
 
     </div>
 
@@ -364,7 +368,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="nav-text">2 字符串拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-text">3 字符位运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%94%99%E8%AF%AF%E8%A7%A3%E6%B3%95"><span class="nav-text">3.1 错误解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%B3%95"><span class="nav-text">3.2 正确解法</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="nav-text">2 字符串拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-text">3 字符位运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%94%99%E8%AF%AF%E8%A7%A3%E6%B3%95"><span class="nav-text">3.1 错误解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%B3%95"><span class="nav-text">3.2 正确解法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-text">4 总结</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
