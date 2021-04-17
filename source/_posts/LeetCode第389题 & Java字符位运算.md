@@ -95,7 +95,27 @@ public static void main(String[] args) {
 
 ## 3.2 正确解法
 
-然而，Java的基本类型char没有办法初始化为NULL，因此，不能用这种方法进行初始化和异或运算，而应该用每个字符的**ASCII码**进行异或运算，这样res初始化时就可以用0表示空。
+### 3.2.1 \0
+
+可以将char类型的res初始化为八进制的\0，这样就成功将其表示为**NULL**。
+
+```
+public static void main(String[] args) {
+    StringBuffer stringBuffer = new StringBuffer().append("abcd").append("abcde");
+
+    char res = '\0';
+
+    for (int i = 0; i < stringBuffer.length(); i++) {
+        res ^= stringBuffer.charAt(i);
+    }
+
+    System.out.println(res); // e
+}
+```
+
+### 3.2.2 ASCII码
+
+可以用每个字符的**ASCII码**进行异或运算，这样res初始化时就可以用0表示空。
 
 ```
 public static void main(String[] args) {
@@ -114,4 +134,4 @@ public static void main(String[] args) {
 # 4 总结
 
 1. Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；
-2. char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。
+2. char类型的空格的ASCII码不为0，会影响字符之间的异或运算结果，可用char类型并初始化为\0，或int类型并初始化为0。
