@@ -113,5 +113,5 @@ public static void main(String[] args) {
 
 # 4 总结
 
-1. Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程场景下的操作；
+1. Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；
 2. char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。
