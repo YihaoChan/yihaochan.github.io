@@ -67,7 +67,7 @@ StringBuffer stringBuffer = new StringBuffer().append("abcd").append("abcde");
 StringBuilder stringBuilder = new StringBuilder().append("abcd").append("abcde");
 ```
 
-先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，所以是线程安全的。
+先有StringBuffer后有StringBuilder，两者就像是孪生双胞胎，该有的都有，只不过大哥 StringBuffer因为多呼吸两口新鲜空气，是**线程安全**的。
 
 使用+号进行拼接字符串时，会创建了多个StringBuilder对象，而使用StringBuffer或StringBuilder的话，至始至终只有一个对象。
 
@@ -111,3 +111,7 @@ public static void main(String[] args) {
 }
 ```
 
+## 4 总结
+
+1. Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；
+2. char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。
