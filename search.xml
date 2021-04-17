@@ -42,7 +42,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    StringBuffer stringBuffer &#x3D; new StringBuffer().append(&quot;abcd&quot;).append(&quot;abcde&quot;);</span><br><span class="line"></span><br><span class="line">    int res &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; stringBuffer.length(); i++) &#123;</span><br><span class="line">        res ^&#x3D; (int) stringBuffer.charAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println((char) res); &#x2F;&#x2F; e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><ol>
-<li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程场景下的操作；</li>
+<li>Java中的字符串拼接应该使用StringBuffer和StringBuilder两个类的append方法，效率高。而StringBuffer适用于多线程下的操作；</li>
 <li>char类型的空字符会“污染”字符之间的异或运算结果，应该用int类型并初始化为0，表示NULL的ASCII码，然后在int类型上进行异或运算。</li>
 </ol>
 ]]></content>
