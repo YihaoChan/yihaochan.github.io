@@ -21,20 +21,32 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="0 前言第一次参赛，意义特殊，记录一下。 比赛链接：https:&#x2F;&#x2F;tianchi.aliyun.com&#x2F;competition&#x2F;entrance&#x2F;531852&#x2F;introduction?lang&#x3D;zh-cn 完整代码：https:&#x2F;&#x2F;github.com&#x2F;YihaoChan&#x2F;2021-Tianchi-GAIIC-Track1-Rank-3 ![](&#x2F;images&#x2F;天池2021”全球人工智能技术创">
+  <meta name="description" content="0 前言第一次参赛，意义特殊，记录一下。 比赛链接：https:&#x2F;&#x2F;tianchi.aliyun.com&#x2F;competition&#x2F;entrance&#x2F;531852&#x2F;introduction?lang&#x3D;zh-cn 完整代码：https:&#x2F;&#x2F;github.com&#x2F;YihaoChan&#x2F;2021-Tianchi-GAIIC-Track1-Rank-3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="天池2021“全球人工智能技术创新大赛”【赛道一】- 记录">
-<meta property="og:url" content="http://example.com/post/9e7b4ce0.html">
+<meta property="og:title" content="2021-天池-GAIIC-赛道一-记录">
+<meta property="og:url" content="http://example.com/post/c516f0e3.html">
 <meta property="og:site_name" content="Yihao Chan&#39;s Blog">
-<meta property="og:description" content="0 前言第一次参赛，意义特殊，记录一下。 比赛链接：https:&#x2F;&#x2F;tianchi.aliyun.com&#x2F;competition&#x2F;entrance&#x2F;531852&#x2F;introduction?lang&#x3D;zh-cn 完整代码：https:&#x2F;&#x2F;github.com&#x2F;YihaoChan&#x2F;2021-Tianchi-GAIIC-Track1-Rank-3 ![](&#x2F;images&#x2F;天池2021”全球人工智能技术创">
+<meta property="og:description" content="0 前言第一次参赛，意义特殊，记录一下。 比赛链接：https:&#x2F;&#x2F;tianchi.aliyun.com&#x2F;competition&#x2F;entrance&#x2F;531852&#x2F;introduction?lang&#x3D;zh-cn 完整代码：https:&#x2F;&#x2F;github.com&#x2F;YihaoChan&#x2F;2021-Tianchi-GAIIC-Track1-Rank-3">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-06-05T09:53:16.000Z">
-<meta property="article:modified_time" content="2021-06-05T13:50:55.982Z">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/%E8%AF%81%E4%B9%A6.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/%E5%A5%96%E6%9D%AF.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_train.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_test_a.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/seq_len_train_set.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/seq_len_test_set_a.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_lstm.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_han.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_dpcnn.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
+<meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
+<meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
+<meta property="article:modified_time" content="2021-06-05T14:17:35.055Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/%E8%AF%81%E4%B9%A6.jpg">
 
-<link rel="canonical" href="http://example.com/post/9e7b4ce0.html">
+<link rel="canonical" href="http://example.com/post/c516f0e3.html">
 
 
 <script id="page-configurations">
@@ -47,7 +59,7 @@
   };
 </script>
 
-  <title>天池2021“全球人工智能技术创新大赛”【赛道一】- 记录 | Yihao Chan's Blog</title>
+  <title>2021-天池-GAIIC-赛道一-记录 | Yihao Chan's Blog</title>
   
 
 
@@ -194,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/9e7b4ce0.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/post/c516f0e3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/assets/avatar.jpg">
@@ -207,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          天池2021“全球人工智能技术创新大赛”【赛道一】- 记录
+          2021-天池-GAIIC-赛道一-记录
         </h1>
 
         <div class="post-meta">
@@ -218,7 +230,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-05 17:53:16 / Modified: 21:50:55" itemprop="dateCreated datePublished" datetime="2021-06-05T17:53:16+08:00">2021-06-05</time>
+              <time title="Created: 2021-06-05 22:12:16 / Modified: 22:17:35" itemprop="dateCreated datePublished" datetime="2021-06-05T22:12:16+08:00">2021-06-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -236,7 +248,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.8k</span>
+              <span>6.1k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -258,10 +270,10 @@
         <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h1><p>第一次参赛，意义特殊，记录一下。</p>
 <p>比赛链接：<a target="_blank" rel="noopener" href="https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn">https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn</a></p>
 <p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/YihaoChan/2021-Tianchi-GAIIC-Track1-Rank-3">https://github.com/YihaoChan/2021-Tianchi-GAIIC-Track1-Rank-3</a></p>
-<p>![](/images/天池2021”全球人工智能技术创新大赛”【赛道一】- 记录/证书.jpg)</p>
-<p>![](/images/天池2021”全球人工智能技术创新大赛”【赛道一】- 记录/奖杯.jpg)</p>
 <a id="more"></a>
 
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/%E8%AF%81%E4%B9%A6.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/%E5%A5%96%E6%9D%AF.jpg"></p>
 <h1 id="1-赛题介绍"><a href="#1-赛题介绍" class="headerlink" title="1 赛题介绍"></a>1 赛题介绍</h1><ul>
 <li><p>提供：CT影像描述文本；</p>
 </li>
@@ -297,12 +309,12 @@
 </tbody></table>
 <p>数据没有任何明文，都是对中文进行加密后的数字，属于无明文<strong>脱敏</strong>数据。由此判断，无法直接调用任何已经开源的预训练权重做下游任务，如果要采用预训练模型的话，需要从头训练(Train from scratch)。</p>
 <h1 id="3-数据探索与分析"><a href="#3-数据探索与分析" class="headerlink" title="3 数据探索与分析"></a>3 数据探索与分析</h1><h2 id="3-1-data分布"><a href="#3-1-data分布" class="headerlink" title="3.1 data分布"></a>3.1 data分布</h2><p>对训练集和A榜测试集的description字段数据进行PCA降至二维并可视化分布图后，如图：</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/distribution_train.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/distribution_test_a.jpg)</p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_train.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_test_a.jpg"></p>
 <p>训练集和A榜测试集的data满足同分布。</p>
 <h2 id="3-2-句长分布"><a href="#3-2-句长分布" class="headerlink" title="3.2 句长分布"></a>3.2 句长分布</h2><p>统计训练集和A榜测试集中不同句长所对应的description数量，如图：</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/seq_len_train_set.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/seq_len_test_set_a.jpg)</p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/seq_len_train_set.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/seq_len_test_set_a.jpg"></p>
 <p>训练集和A榜测试集上，最短句长均为4，最长句长分别为104和102，做句长截断、填充的时候可以参考。</p>
 <h2 id="3-3-词频统计"><a href="#3-3-词频统计" class="headerlink" title="3.3 词频统计"></a>3.3 词频统计</h2><p>对训练集和A榜测试集的description字段数据进行词频统计：</p>
 <p>训练集和A榜测试集上，编码均从0 ~ 857，词典大小均为858。词频的top2所对应的词相同，均为693、328，结合以往阅读文章的经验，可猜想这两个数字对应中文明文的逗号和句号。这也是后续我们的方案中，<strong>去除停用词</strong>的依据。</p>
@@ -319,11 +331,11 @@
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
 <p>单模结果与融合后结果3D可视化：</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/3D_results_lstm.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/3D_results_han.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/3D_results_dpcnn.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/3D_results_nezha.jpg)</p>
-<p>![](/images/天池2021“全球人工智能技术创新大赛”【赛道一】- 记录/3D_results_merge.jpg)</p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_lstm.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_han.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_dpcnn.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg"></p>
+<p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg"></p>
 <h2 id="4-2-复赛模型"><a href="#4-2-复赛模型" class="headerlink" title="4.2 复赛模型"></a>4.2 复赛模型</h2><p>同初赛，复赛我们所采用的模型的名字为：</p>
 <p><strong>Noah’s Ark: <em>N</em>EZHA Trained J<em>O</em>intly and Sep<em>A</em>rately with <em>H</em>AN, L<em>S</em>TM and Deep Pyr<em>A</em>mid Convolutional Neu<em>R</em>al Networ<em>K</em>s</strong></p>
 <p>主要流程：</p>
@@ -367,9 +379,7 @@
 <p>唯一比较遗憾的就是，我们三个人都没能在决赛现场见上面。师兄在实习不让请假，我因为看到广州有一天增加了12例直接吓怕了，不敢乱跑…所以就剩下学姐一人去杭州现场答辩啦，给我们直播会场情况。答辩过程蛮顺利的，评委问的其中一个问题还被我们押中了——“是不是融合越多模型越好？”直接搬出西瓜书的”偏差-方差窘境”，完美！另一个问题也蛮简单的，问预训练后有没有finetune，其实就是问有没有冻结权重嘛，简单。还有之前加了几位其他队伍的选手的微信，他们还夸我们的PPT做得好看~</p>
 <h2 id="7-5-反思"><a href="#7-5-反思" class="headerlink" title="7.5 反思"></a>7.5 反思</h2><p>这是第一次参加大数据竞赛，真的是远超出自己的预期。最开始我起的队伍名字是：希望能完赛。从一开始抱着重在参与的心态，到后来看到自己一步步在往上爬，再与队友相识，一起冲进复赛、冲进前10、冲进决赛…感觉有些不真实，感觉自己运气很好，遇到的队友是对的，遇到的一起竞赛的选手是乐于分享的，模型选的是没错的，自己调的参数是准的…当然，也别太得意了，开心一下就可以了，还要学的东西实在很多很多。</p>
 <p>想起主办方发给我的采访问题：”你们的队伍有指导老师吗？如果有的话，能否讲讲指导老师给了你们哪些启发？”一开始我写下的答案只有5个字：”无指导老师”。但是转头一想，每周的前两名周周星会进行方案分享，而我也会在比赛交流群里请教各位前辈，对作为新手的我来说，他们就是我的指导老师。</p>
-<p>在知乎看到过非常扎心的一段话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">很多比赛的Leaderboard里大家的分数都相差不大，造成这种现象的原因是因为已经有好的baseline快接近数据上限了，因此大家的分数都挤在一个小区间里。如果去找一个没有现成baseline的机器视觉比赛看看，就会发现大家的差距其实大的可怕，1000人的比赛，可能第一名accuracy到0.95，第五十名还在0.6动弹不得。</span><br></pre></td></tr></table></figure>
-
+<p>在知乎看到过非常扎心的一段话：”很多比赛的Leaderboard里大家的分数都相差不大，造成这种现象的原因是因为已经有好的baseline快接近数据上限了，因此大家的分数都挤在一个小区间里。如果去找一个没有现成baseline的机器视觉比赛看看，就会发现大家的差距其实大的可怕，1000人的比赛，可能第一名accuracy到0.95，第五十名还在0.6动弹不得。”</p>
 <p>想想我，不就是这个情况吗？一开始我自己的代码真是一团糟，得亏其他选手开源了baseline，我才能有后续的一系列成绩。要走的路还长着呢！</p>
 <p>继续努力。</p>
 
