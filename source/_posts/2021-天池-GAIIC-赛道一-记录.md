@@ -6,15 +6,15 @@ abbrlink: c516f0e3
 date: 2021-06-05 22:12:16
 ---
 
-第一次参赛，意义特殊，记录一下。
-
-<!--more-->
-
 # 0 前言
+
+第一次参赛，意义特殊，记录一下。
 
 比赛链接：https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn
 
 完整代码：https://github.com/YihaoChan/2021-Tianchi-GAIIC-Track1-Rank-3
+
+<!--more-->
 
 ![](/images/2021-天池-GAIIC-赛道一-记录/证书.jpg)
 
