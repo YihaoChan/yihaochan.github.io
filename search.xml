@@ -1,61 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Vim的系统剪贴板的奇妙发现</title>
-    <url>/post/10c2209c.html</url>
-    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
-<a id="more"></a>
-
-<p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
-<h2 id="1-查看Vim是否支持系统剪贴板"><a href="#1-查看Vim是否支持系统剪贴板" class="headerlink" title="1. 查看Vim是否支持系统剪贴板"></a>1. 查看Vim是否支持系统剪贴板</h2><p>在终端中输入<code>vim --version | grep clipboard</code>，观察<strong>clipboard</strong>选项前的符号：如果为 <strong>-</strong> 号，说明当前的Vim不支持系统剪贴板，需要先在终端执行<code>sudo apt install vim-gnome</code>，之后再次执行<code>vim --version | grep clipboard</code>，可以看到<strong>clipboard</strong>选项前的符号为 <strong>+</strong> 号，表示当前的Vim已经支持系统剪贴板。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png"></p>
-<h2 id="2-查看Linux系统的系统剪贴板内容"><a href="#2-查看Linux系统的系统剪贴板内容" class="headerlink" title="2. 查看Linux系统的系统剪贴板内容"></a>2. 查看Linux系统的系统剪贴板内容</h2><p>执行<code>sudo apt install xclip</code>安装xclip，再执行<code>xclip -o</code>命令，就可以查看当前Linux系统的系统剪贴板内容。</p>
-<p>e.g. 在终端上打印一串字符：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png"></p>
-<p>然后用鼠标选中，按下<code>ctrl + shift + c</code>复制：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png"></p>
-<p>执行<code>xclip -o</code>命令查看系统剪贴板内容：</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png"></p>
-<p>此时可以看到，用户手动复制到了Linux的系统剪贴板的内容已经通过<code>xclip -o</code>成功显示。</p>
-<h2 id="3-通过Vim的系统剪贴板将内容复制到Vim以外的地方"><a href="#3-通过Vim的系统剪贴板将内容复制到Vim以外的地方" class="headerlink" title="3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方"></a>3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</h2><p>使用Vim打开任意一个文件，按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，执行<code>:reg</code>查看Vim的寄存器，可以看到Vim的系统剪贴板寄存器(“+寄存器)已存放我们刚才复制的一整行内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
-<p>之后<strong>不要退出</strong>Vim窗口，打开任意一个Vim以外的地方，快捷键<code>ctrl + v</code>，可以看到在Vim中复制的内容已经粘贴到Vim以外的地方。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
-<p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
-<p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
-<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印(Test for system clipboard.)并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
-<p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
-<p>在Vim中执行<code>:wq</code>退出Vim窗口，再在终端按下快捷键<code>ctrl + shift +v</code>，什么都没有。但是执行<code>xclip -o</code>却还是查看到了之前我手动复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
-<h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
-<p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
-<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也<strong>没有归还</strong>Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
-<h2 id="6-尝试将内容复制到Linux的系统粘贴板"><a href="#6-尝试将内容复制到Linux的系统粘贴板" class="headerlink" title="6. 尝试将内容复制到Linux的系统粘贴板"></a>6. 尝试将内容复制到Linux的系统粘贴板</h2><p>那么，如何真正做到在Vim中复制内容之后，即使在将Vim关闭之后，也能在其他地方粘贴呢？</p>
-<h3 id="6-1-尝试1：进入Vim的可视模式"><a href="#6-1-尝试1：进入Vim的可视模式" class="headerlink" title="6.1 尝试1：进入Vim的可视模式"></a>6.1 尝试1：进入Vim的可视模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>v</code>进入可视模式。按左右方向键对字符进行选中，再按下y键进行复制。关闭Vim，敲下粘贴快捷键，<strong>一片空白。</strong></p>
-<p>结论：可视模式无法将Vim中的内容复制到Linux的系统剪贴板。</p>
-<h3 id="6-2-尝试2：让Vim进程进入后台"><a href="#6-2-尝试2：让Vim进程进入后台" class="headerlink" title="6.2 尝试2：让Vim进程进入后台"></a>6.2 尝试2：让Vim进程进入后台</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，按下Linux系统快捷键<code>ctrl + z</code>将Vim进程放到后台。此时Vim进程已经被放到后台，并处于suspended(暂停)状态。</p>
-<p>执行<code>bg %1</code>命令让Vim进程在后台运行，可以看到Vim进程在continued状态之后还是切换到了suspended状态，执行<code>jobs</code>命令，Vim进程还是处于suspended状态。在任意一处按下Linux系统的粘贴快捷键，依旧是<strong>一片空白。</strong></p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%B0%86Vim%E6%94%BE%E5%88%B0%E5%90%8E%E5%8F%B0bg.png"></p>
-<p>结论：将Vim进程放到后台，只能让Vim处于suspended状态，且无法让在Vim中的复制到Vim的系统剪贴板的内容进入Linux的系统剪贴板。</p>
-<h3 id="6-3-尝试3：进入Vim的插入模式"><a href="#6-3-尝试3：进入Vim的插入模式" class="headerlink" title="6.3 尝试3：进入Vim的插入模式"></a>6.3 尝试3：进入Vim的插入模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>i</code>进入插入模式。用<strong>鼠标</strong>手动选中内容，并按下Linux系统的复制快捷键<code>ctrl + shift + c</code>复制。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6.png"></p>
-<p>关闭Vim，敲下Linux的粘贴快捷键，<strong>成功</strong>将Vim中内容复制到Vim以外。此时执行<code>xclip -o</code>命令，可以看到Linux的系统剪贴板也显示我们在Vim中通过插入模式用鼠标选中并复制的内容。</p>
-<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6-%E5%85%B3%E6%8E%89%E5%90%8E%E7%B2%98%E8%B4%B4.png"></p>
-<p>结论：要想在关掉VIm之后，将在Vim中复制的内容送到Linux的系统剪贴板，需要在Vim中切换到插入模式，并用鼠标手动选中内容，再按下Linux系统的复制快捷键。之后即使关掉Vim，也能将内容粘贴到任意地方。<strong>但是</strong>，这不就违背了Vim的核心思想——“只通过键盘操作，解放鼠标操作”了吗？(滑稽)。</p>
-<p>或许有人会说：在不关掉Vim的时候进行粘贴不就好了嘛。假设我需要把这部分复制的内容粘贴很多次，而且并非同时粘贴，可能是间断性不定时地粘贴，那么如果采用Vim的”系统”剪贴板进行复制粘贴的话，就意味着我需要一直开着这个Vim进程，不能人为/意外地关闭它。对于我这种强迫症来说，是接受不了的。对于不会用到的东西/进程，我一定选择丢弃~</p>
-<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。如果真要在关闭Vim之后还能获得在Vim中复制的内容，办法就是切换到Vim的插入模式，用鼠标进行选中和复制，之后不管关闭Vim与否，都可以进行粘贴。</p>
-<p>至于我们的猜想到底对不对，等我有能力读懂Vim的源代码之后再下定论。</p>
-]]></content>
-      <categories>
-        <category>Operation System</category>
-      </categories>
-      <tags>
-        <tag>Vim</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode第389题 &amp; Java字符位运算</title>
     <url>/post/7b768b28.html</url>
     <content><![CDATA[<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p><a href="https://leetcode-cn.com/problems/find-the-difference/">LeetCode第389题-找不同</a>：</p>
@@ -109,6 +54,61 @@
       </categories>
       <tags>
         <tag>Bit Operation</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vim的系统剪贴板的奇妙发现</title>
+    <url>/post/10c2209c.html</url>
+    <content><![CDATA[<p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
+<a id="more"></a>
+
+<p>P.S. 以下过程均以Ubuntu 18.04.5操作系统为例进行演示。</p>
+<h2 id="1-查看Vim是否支持系统剪贴板"><a href="#1-查看Vim是否支持系统剪贴板" class="headerlink" title="1. 查看Vim是否支持系统剪贴板"></a>1. 查看Vim是否支持系统剪贴板</h2><p>在终端中输入<code>vim --version | grep clipboard</code>，观察<strong>clipboard</strong>选项前的符号：如果为 <strong>-</strong> 号，说明当前的Vim不支持系统剪贴板，需要先在终端执行<code>sudo apt install vim-gnome</code>，之后再次执行<code>vim --version | grep clipboard</code>，可以看到<strong>clipboard</strong>选项前的符号为 <strong>+</strong> 号，表示当前的Vim已经支持系统剪贴板。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E5%BC%80%E5%90%AFClipboard.png"></p>
+<h2 id="2-查看Linux系统的系统剪贴板内容"><a href="#2-查看Linux系统的系统剪贴板内容" class="headerlink" title="2. 查看Linux系统的系统剪贴板内容"></a>2. 查看Linux系统的系统剪贴板内容</h2><p>执行<code>sudo apt install xclip</code>安装xclip，再执行<code>xclip -o</code>命令，就可以查看当前Linux系统的系统剪贴板内容。</p>
+<p>e.g. 在终端上打印一串字符：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E5%86%85%E5%AE%B9.png"></p>
+<p>然后用鼠标选中，按下<code>ctrl + shift + c</code>复制：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E7%BB%88%E7%AB%AF%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9.png"></p>
+<p>执行<code>xclip -o</code>命令查看系统剪贴板内容：</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF.png"></p>
+<p>此时可以看到，用户手动复制到了Linux的系统剪贴板的内容已经通过<code>xclip -o</code>成功显示。</p>
+<h2 id="3-通过Vim的系统剪贴板将内容复制到Vim以外的地方"><a href="#3-通过Vim的系统剪贴板将内容复制到Vim以外的地方" class="headerlink" title="3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方"></a>3. 通过Vim的系统剪贴板将内容复制到Vim以外的地方</h2><p>使用Vim打开任意一个文件，按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，执行<code>:reg</code>查看Vim的寄存器，可以看到Vim的系统剪贴板寄存器(“+寄存器)已存放我们刚才复制的一整行内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/Vim%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
+<p>之后<strong>不要退出</strong>Vim窗口，打开任意一个Vim以外的地方，快捷键<code>ctrl + v</code>，可以看到在Vim中复制的内容已经粘贴到Vim以外的地方。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%A4%8D%E5%88%B6%E5%88%B0Vim%E4%BB%A5%E5%A4%96.png"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再到另一个地方按下快捷键<code>ctrl + v</code>，可以发现，<strong>什么都没有</strong>。</p>
+<p>当我好几次重复上述过程都发现，没有办法在关闭Vim的情况下粘贴已经在Vim中复制的内容的时候，我就开始有点怀疑了：Vim的系统剪贴板，到底是不是真正的”系统”剪贴板？</p>
+<h2 id="4-结合xclip-o仔细观察"><a href="#4-结合xclip-o仔细观察" class="headerlink" title="4. 结合xclip -o仔细观察"></a>4. 结合xclip -o仔细观察</h2><p>在终端再次打印(Test for system clipboard.)并手动复制，然后执行<code>xclip -o</code>，可以看到Linux的系统剪贴板内容此时就是我们复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%86%8D%E6%AC%A1xclip.png"></p>
+<p>而当我们在Vim中通过命令模式执行<code>&quot;+yy</code>之后，我们可以的确可以将Vim中复制的内容原封不动地粘贴到Vim以外的地方。<strong>但是，</strong><code>xclip -o</code>查看到的却是我们之前在Vim以外的地方手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E4%B8%A4%E6%AC%A1%E5%AF%B9%E6%AF%94.png" alt="&quot;Test for Vim clipboard.&quot;是我从Vim中复制并粘贴到终端上的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<p>在Vim中执行<code>:wq</code>退出Vim窗口，再在终端按下快捷键<code>ctrl + shift +v</code>，什么都没有。但是执行<code>xclip -o</code>却还是查看到了之前我手动复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/xclip%E7%9C%8B%E5%88%B0%E4%B9%8B%E5%89%8D.png" alt="&quot;空行&quot;是我关掉Vim后按下粘贴快捷键后显示的内容，而&quot;Test for system clipboard.&quot;是我之前手动在终端上复制的内容。"></p>
+<h2 id="5-浅显通俗的猜想与拙见"><a href="#5-浅显通俗的猜想与拙见" class="headerlink" title="5. 浅显通俗的猜想与拙见"></a>5. 浅显通俗的猜想与拙见</h2><p>由此可见，Vim的”系统”剪贴板，并没有真正将内容拷贝到Linux的系统剪贴板上，当Vim这个进程被关闭了之后，Vim的”系统”剪贴板上的东西就会全部消失，并且也让Linux的系统剪贴板上的内容消失。</p>
+<p>在与同学分享并讨论这个情况之后，我们用通俗的猜想去理解这个现象：在Vim中执行<code>&quot;+yy</code>命令后，VIm对Linux的粘贴快捷键进行了”劫持”。</p>
+<p>在Vim进程未关闭的时候，我们去往Vim以外的任何地方进行粘贴，粘贴的内容都是保存在Vim的系统剪贴板寄存器中的内容，并且此时我们的粘贴快捷键粘贴的内容，已经和我们Linux的系统剪贴板上的内容<strong>没有任何关系</strong>。相当于，在Vim收到了<code>&quot;+yy</code>这个命令后，Vim”劫持”掉了我们Linux系统的粘贴快捷键，不管我们粘贴什么东西，都是来自于Vim的系统剪贴板寄存器。而在Vim进程关闭之后，自然Vim的寄存器随着Vim进程的关闭而消失，所以Vim的系统剪贴板寄存器中的内容被清空。而此时由于Linux的粘贴快捷键在之前已经被Vim”劫持”，并且Vim在关闭进程的时候也<strong>没有归还</strong>Linux的粘贴快捷键内容，因此，在Vim关闭后，不管我们怎么敲粘贴快捷键，都是一片空白。但<code>xclip -o</code>还是查看到了我们在Vim中复制之前的Linux系统剪贴板内容，可我们已经和它无缘。</p>
+<h2 id="6-尝试将内容复制到Linux的系统粘贴板"><a href="#6-尝试将内容复制到Linux的系统粘贴板" class="headerlink" title="6. 尝试将内容复制到Linux的系统粘贴板"></a>6. 尝试将内容复制到Linux的系统粘贴板</h2><p>那么，如何真正做到在Vim中复制内容之后，即使在将Vim关闭之后，也能在其他地方粘贴呢？</p>
+<h3 id="6-1-尝试1：进入Vim的可视模式"><a href="#6-1-尝试1：进入Vim的可视模式" class="headerlink" title="6.1 尝试1：进入Vim的可视模式"></a>6.1 尝试1：进入Vim的可视模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>v</code>进入可视模式。按左右方向键对字符进行选中，再按下y键进行复制。关闭Vim，敲下粘贴快捷键，<strong>一片空白。</strong></p>
+<p>结论：可视模式无法将Vim中的内容复制到Linux的系统剪贴板。</p>
+<h3 id="6-2-尝试2：让Vim进程进入后台"><a href="#6-2-尝试2：让Vim进程进入后台" class="headerlink" title="6.2 尝试2：让Vim进程进入后台"></a>6.2 尝试2：让Vim进程进入后台</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再执行<code>&quot;+yy</code>命令复制当前一整行至Vim的系统剪贴板，按下Linux系统快捷键<code>ctrl + z</code>将Vim进程放到后台。此时Vim进程已经被放到后台，并处于suspended(暂停)状态。</p>
+<p>执行<code>bg %1</code>命令让Vim进程在后台运行，可以看到Vim进程在continued状态之后还是切换到了suspended状态，执行<code>jobs</code>命令，Vim进程还是处于suspended状态。在任意一处按下Linux系统的粘贴快捷键，依旧是<strong>一片空白。</strong></p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E5%B0%86Vim%E6%94%BE%E5%88%B0%E5%90%8E%E5%8F%B0bg.png"></p>
+<p>结论：将Vim进程放到后台，只能让Vim处于suspended状态，且无法让在Vim中的复制到Vim的系统剪贴板的内容进入Linux的系统剪贴板。</p>
+<h3 id="6-3-尝试3：进入Vim的插入模式"><a href="#6-3-尝试3：进入Vim的插入模式" class="headerlink" title="6.3 尝试3：进入Vim的插入模式"></a>6.3 尝试3：进入Vim的插入模式</h3><p>在Vim中按下<code>Esc</code>进入命令模式，再按下<code>i</code>进入插入模式。用<strong>鼠标</strong>手动选中内容，并按下Linux系统的复制快捷键<code>ctrl + shift + c</code>复制。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6.png"></p>
+<p>关闭Vim，敲下Linux的粘贴快捷键，<strong>成功</strong>将Vim中内容复制到Vim以外。此时执行<code>xclip -o</code>命令，可以看到Linux的系统剪贴板也显示我们在Vim中通过插入模式用鼠标选中并复制的内容。</p>
+<p><img data-src="/images/Vim%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E7%9A%84%E5%A5%87%E5%A6%99%E5%8F%91%E7%8E%B0/%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6-%E5%85%B3%E6%8E%89%E5%90%8E%E7%B2%98%E8%B4%B4.png"></p>
+<p>结论：要想在关掉VIm之后，将在Vim中复制的内容送到Linux的系统剪贴板，需要在Vim中切换到插入模式，并用鼠标手动选中内容，再按下Linux系统的复制快捷键。之后即使关掉Vim，也能将内容粘贴到任意地方。<strong>但是</strong>，这不就违背了Vim的核心思想——“只通过键盘操作，解放鼠标操作”了吗？(滑稽)。</p>
+<p>或许有人会说：在不关掉Vim的时候进行粘贴不就好了嘛。假设我需要把这部分复制的内容粘贴很多次，而且并非同时粘贴，可能是间断性不定时地粘贴，那么如果采用Vim的”系统”剪贴板进行复制粘贴的话，就意味着我需要一直开着这个Vim进程，不能人为/意外地关闭它。对于我这种强迫症来说，是接受不了的。对于不会用到的东西/进程，我一定选择丢弃~</p>
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><p>在发现这个现象后，我真的感叹开发Vim的这个功能的开发人员太太太聪明了！虽然…ta给我们带来了一些麻烦。所以，以后要将Vim中的内容复制到Vim外面的时候，切记<strong>不能</strong>退出Vim，否则怎么粘贴都没有用。如果在打开Vim之前用户自己有手动复制过某内容的话，那么在Vim中复制内容到Vim的系统剪贴板并退出Vim之后，也不会保留打开Vim之前复制的内容，只剩下一片空白。如果真要在关闭Vim之后还能获得在Vim中复制的内容，办法就是切换到Vim的插入模式，用鼠标进行选中和复制，之后不管关闭Vim与否，都可以进行粘贴。</p>
+<p>至于我们的猜想到底对不对，等我有能力读懂Vim的源代码之后再下定论。</p>
+]]></content>
+      <categories>
+        <category>Operation System</category>
+      </categories>
+      <tags>
+        <tag>Vim</tag>
       </tags>
   </entry>
   <entry>
@@ -292,12 +292,12 @@
 <p><strong>Normandy: <em>N</em>EZHA, L<em>O</em>ng Sho<em>R</em>t-Term <em>M</em>emory, Hierarchical <em>A</em>ttention <em>N</em>etworks and <em>D</em>eep P<em>Y</em>ramid Convolutional Neural Networks</strong></p>
 <p>主要流程：</p>
 <ol>
-<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</li>
 <li>对于NEZHA预训练模型：将训练集和测试集的description进行”一句一文档”的操作进行预训练，之所以进行”一句一文档”，是为了取消BERT模型的NSP(Next Sentence Prediction)任务，因为NSP任务在BERT类模型上表现都不好，这一点已在RoBERTa论文中有提到。单进行MLM任务之后，接MLP进入微调训练阶段，结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</li>
+<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</li>
 <li>两类模型均使用分层采样与k折交叉验证；</li>
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
-<p>单模结果与融合后结果3D可视化：</p>
+<p>单模结果与融合后结果用TSNE降至三维后可视化：</p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_lstm.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_han.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_dpcnn.jpg"></p>
@@ -307,13 +307,22 @@
 <p><strong>Noah’s Ark: <em>N</em>EZHA Trained J<em>O</em>intly and Sep<em>A</em>rately with <em>H</em>AN, L<em>S</em>TM and Deep Pyr<em>A</em>mid Convolutional Neu<em>R</em>al Networ<em>K</em>s</strong></p>
 <p>主要流程：</p>
 <ol>
-<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：采用分开训练的策略，即，将任务1和任务2分别训练，之后再将结果进行拼接。训练过程中，先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</li>
-<li>对于NEZHA预训练模型：采用联合训练与分开训练两种策略，即，(1)将两个任务拼接作为一个完整任务进行训练，(2)将任务1和任务2分别训练，之后再将结果进行拼接。因为NEZHA单模表现实在太优秀，所以两种策略都做，之后再融合。训练过程中，结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</li>
-<li>两类模型均使用分层采样与k折交叉验证；</li>
-<li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
+<li><p>对于NEZHA预训练模型：预训练阶段取消NSP任务，微调训练阶段采用<strong>联合训练(Jointly Train)**与</strong>分开训练(Separately Train)**两种策略，即：</p>
+<ol>
+<li>联合训练：将两个任务拼接作为一个完整任务进行训练；</li>
+<li>分开训练：将任务1和任务2分别用不同模型训练，之后再将结果进行拼接。</li>
+</ol>
+<p>因为NEZHA单模表现实在太优秀，所以两种策略都做，之后再融合。训练阶段结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</p>
+</li>
+<li><p>对于基础深度学习模型(LSTM、HAN、DPCNN)：采用分开训练的策略，训练过程中，先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</p>
+</li>
+<li><p>两类模型均使用分层采样与k折交叉验证；</p>
+</li>
+<li><p>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</p>
+</li>
 </ol>
 <p>复赛的测试集和提交结果等均在线上不可下载、不可打印，所以无可视化图。</p>
-<h1 id="5-失败的尝试"><a href="#5-失败的尝试" class="headerlink" title="5 失败的尝试"></a>5 失败的尝试</h1><ol>
+<h1 id="5-其余尝试"><a href="#5-其余尝试" class="headerlink" title="5 其余尝试"></a>5 其余尝试</h1><ol>
 <li>伪标签：第一次先用原训练集进行训练后，对测试集做推理，得出初步推理结果。之后将推理得到的output和测试集的data拼接成新的训练数据加入训练集，再对这个新的训练集进行训练，最后对测试集再做一次推理，得到提交结果；</li>
 <li>数据增强：随机替换、随机删除、分段乱序。掉分原因可能是简单数据增强(EDA,  Easy Data Augmentation)所增强获得的数据质量不够高，增强后的数据分布可能破坏了原数据集的分布；</li>
 <li>对损失函数手动分配权重：由于标签类别不平衡，最多的类别所对应数据数量有1846，最少的只有209，属于类别不平衡问题。因此考虑在训练的时候给损失函数直接设定一定的比例，使得算法能够对小类数据具有更多的”注意力”。猜想：标签类别是否已经不平衡到需要手动分配权重的程度？也就是说，在这种情况下，手动分配权重是否有必要？；</li>
@@ -325,17 +334,17 @@
 </ol>
 </li>
 <li>分组构造NSP任务：对于标签相同的description，将它们拼接成同一个文档，构造出一个文档中有多个句子的状况，以加入预训练过程中的NSP任务。掉分原因已在前面简述：BERT的NSP任务本身表现不是很好；</li>
-<li>加载开源权重：尝试过在预训练的时候，用华为已经训练好了的权重做初始化，发现与不加载权重相比，线上得分相差非常小，还不排除是云平台不同机器的原因。考虑到加载权重需要额外空间，所以最后仍然采取全代码运行的方案。</li>
+<li>加载开源权重：尝试过在预训练的时候，用华为已经训练好了的权重做初始化(除Embedding层外，其余层的信息仍然有价值)，发现与不加载权重相比，线上得分相差非常小，还不排除是云平台不同机器的原因。考虑到加载权重需要额外空间，所以最后仍然采取全代码运行的方案。</li>
 </ol>
-<h1 id="6-方案不足"><a href="#6-方案不足" class="headerlink" title="6 方案不足"></a>6 方案不足</h1><ol>
-<li>训练时间较长：V100单卡，全流程需要40小时左右；</li>
-<li>推理速度较慢：V100单卡，推理速度320ms/条。</li>
+<h1 id="6-量化指标"><a href="#6-量化指标" class="headerlink" title="6 量化指标"></a>6 量化指标</h1><ol>
+<li>训练时间：V100单卡，全流程运行需要42小时左右；</li>
+<li>推理速度：V100单卡，推理速度320ms/条。</li>
 </ol>
 <h1 id="7-与自己个人有关的事情"><a href="#7-与自己个人有关的事情" class="headerlink" title="7 与自己个人有关的事情"></a>7 与自己个人有关的事情</h1><h2 id="7-1-参赛前"><a href="#7-1-参赛前" class="headerlink" title="7.1 参赛前"></a>7.1 参赛前</h2><p>二月末的时候，同班同学zyp发给了我有关这个比赛的链接，还是我们学校计算机学院公众号推送的。当时只看题目的时候，还觉得赛道一可能是数据挖掘类的题(做特征工程的那种)，赛道二明显是CV(不喜欢CV，直接跳过这个题)，赛道三是文本语义匹配，妥妥的NLP，而且肯定BERT当道的类型，当时还完全不了解BERT，只知道个名字…那个时候其实也没什么忙的事情做，而且以后也想往机器学习方面发展，总是要尝试第一次的嘛，看上去赛道一比较适合新手一点，所以就拉上之前做课程项目的固定队友lrx同学，一起决定报名赛道一了。</p>
 <h2 id="7-2-初赛"><a href="#7-2-初赛" class="headerlink" title="7.2 初赛"></a>7.2 初赛</h2><h3 id="7-2-1-尝试"><a href="#7-2-1-尝试" class="headerlink" title="7.2.1 尝试"></a>7.2.1 尝试</h3><p>一开始一公布数据集和题目的时候，就开始自己动手实现了，仔细理解了一下题目，发现就是NLP的题。好在之前接触过一点NLP方面的东西，就对照着之前自己做的一些小demo，修修补补，抄抄删删，勉强做出来的baseline真是速度又慢、效果又差…一直很郁闷的时候，群里一位西交自动化的研究生师兄公布了他的baseline。当时跑通baseline之后，明显比我的成绩好得不要太多，就决定拿他的baseline来改了。其实后来才知道，一些热门的比赛中，会有一些选手公布自己的baseline给其他选手，算是一种分享。不过自己也不能太依赖别人的东西，是吧~</p>
-<p>看懂baseline，然后封装、优化，形成自己的代码风格后，就开始改模型、调参了。期间多亏了zyp同学在他们实验室的服务器上(偷偷)给我开了个账号，让我连进去炼丹。具体过程见这篇博客：<a href="https://yihaochan.github.io/post/cb736208.html">记一次内网穿透</a>。把baseline的CNN换上自己中意的双向LSTM之后，一度冲上30名，然后就瓶颈了…好在天池设立了一个”周周星”环节——鼓励每周的排行榜前两名分享自己的方案和心得给其他选手。不得不说这个环节真是太好了，从各位周周星那里真的学到超多比赛的方法和技巧，运用上他们所说的一部分技巧后，我的成绩又有了很大的进步。</p>
+<p>看懂baseline，然后封装、优化，形成自己的代码风格后，就开始改模型、调参了。期间多亏了zyp同学在他们实验室的服务器上(偷偷)给我开了个账号，让我连进去炼丹，具体过程见这篇博客：<a href="https://yihaochan.github.io/post/cb736208.html">记一次内网穿透</a>。把baseline的CNN换上自己中意的双向LSTM之后，一度冲上30名，然后就瓶颈了…好在天池设立了一个”周周星”环节——鼓励每周的排行榜前两名分享自己的方案和心得给其他选手。不得不说这个环节真是太好了，从各位周周星那里真的学到超多比赛的方法和技巧，运用上他们所说的一部分技巧后，我的成绩又有了很大的进步。</p>
 <h3 id="7-2-2-结识新队友"><a href="#7-2-2-结识新队友" class="headerlink" title="7.2.2 结识新队友"></a>7.2.2 结识新队友</h3><p>其实蛮可惜的，当时zyp同学和lrx同学都有各自的事情要忙，一位忙实验室的论文、忙着做各种实验抽不出时间，一位因为疫情原因不得不放弃出国、转投简历找工作…所以几乎相当于我一直一个人在做比赛，实在蛮累的。记得当时我线上成绩在60名左右就上不去了，刚好群里一位选手的队伍线上40名，二缺一，就缺个调BERT的，而我正好想靠BERT继续冲分(因为传统深度学习模型在NLP的比赛实在太难冲前排了…)，所以就征求了一下两位同学的意见，想过去其他的队伍，毕竟靠自己一个人真的太难太累了，也不想把成绩就此止步。两位队友表示理解之后，我就向招队友的队伍自荐了一下，最后就进入了新队伍啦。</p>
-<h3 id="7-2-3-后期"><a href="#7-2-3-后期" class="headerlink" title="7.2.3 后期"></a>7.2.3 后期</h3><p>新队伍的队友是一位学姐和一位师兄。师兄发给了我BERT的keras版本baseline之后，先花了一天了解了下BERT的原理，然后花了一下午看懂代码后优化，变成自己的风格。之后跑了个裸模型提交了一下，比我之前做的基础深度学习模型加一堆tricks和融合之后的效果好太多太多了…用的是BERT的变种——华为的NEZHA。不得不说，BERT人人都用是有道理的。切B榜之后，把NEZHA和学姐那边基础深度学习模型的结果融了一下，18名，进入复赛。</p>
+<h3 id="7-2-3-后期"><a href="#7-2-3-后期" class="headerlink" title="7.2.3 后期"></a>7.2.3 后期</h3><p>新队伍的队友是一位学姐和一位师兄。师兄发给了我BERT的keras版本baseline之后，我先花了一天了解了下BERT的原理，然后花了一下午看懂代码后优化，变成自己的风格。之后跑了个裸模型提交了一下，比我之前做的基础深度学习模型加一堆tricks和融合之后的效果好太多太多了…用的是BERT的变种——华为的NEZHA。不得不说，BERT人人都用是有道理的。切B榜之后，把NEZHA和学姐那边基础深度学习模型的结果融了一下，18名，进入复赛。</p>
 <h2 id="7-3-复赛"><a href="#7-3-复赛" class="headerlink" title="7.3 复赛"></a>7.3 复赛</h2><h3 id="7-3-1-A榜"><a href="#7-3-1-A榜" class="headerlink" title="7.3.1 A榜"></a>7.3.1 A榜</h3><p>进入复赛后，天池要求提供打包好了的Docker镜像，用线上云平台的机器运行。这一点对我们队来说还是很友好的。我就不说了，本科没机器，硕士还没找老师干活(还在自己补基础和做比赛嘿嘿)；学姐是力学相关专业的，机器学习只是她个人兴趣，所以也没有计算资源；有机器的就师兄那边了，但是有时候一天可能要做好多实验，我这边好几个、师兄那边好几个，只用他的机器实在很麻烦。所以就学了一下Docker，试了下能不能跑通提交后，我们队就都采用线上提交的方式了，刚好测试集在线上不可下载，把代码提交到云端，还能挂载线上的测试集，把文本加进语料库做NEZHA的预训练。挺好的，还多学了Docker这项技能。不得不说一句，天池提供的镜像还蛮难用的，兼容性不是很好…</p>
 <p>复赛的label在初赛的基础上增加多了一个任务，我就用NEZHA实现了一下，把两个任务拼接成一个总任务、做onehot编码，其余环节不变。当时提交的队伍还蛮少的，我们直接到了前10了，还挺惊喜的。</p>
 <p>Well begun is half done. 看到当时的成绩，信心十足。之后进行了蛮多的尝试的：</p>
@@ -354,7 +363,7 @@
 <h2 id="7-5-反思"><a href="#7-5-反思" class="headerlink" title="7.5 反思"></a>7.5 反思</h2><p>这是第一次参加大数据竞赛，真的是远超出自己的预期。最开始我起的队伍名字是：希望能完赛。从一开始抱着重在参与的心态，到后来看到自己一步步在往上爬，再与队友相识，一起冲进复赛、冲进前10、冲进决赛…感觉有些不真实，感觉自己运气很好，遇到的队友是对的，遇到的一起竞赛的选手是乐于分享的，模型选的是没错的，自己调的参数是准的…当然，也别太得意了，开心一下就可以了，还要学的东西实在很多很多。</p>
 <p>想起主办方发给我的采访问题：”你们的队伍有指导老师吗？如果有的话，能否讲讲指导老师给了你们哪些启发？”一开始我写下的答案只有5个字：”无指导老师”。但是转头一想，每周的前两名周周星会进行方案分享，而我也会在比赛交流群里请教各位前辈，对作为新手的我来说，他们就是我的指导老师。</p>
 <p>在知乎看到过非常扎心的一段话：”很多比赛的Leaderboard里大家的分数都相差不大，造成这种现象的原因是已经有好的baseline快接近数据上限了，因此大家的分数都挤在一个小区间里。如果去找一个没有现成baseline的机器视觉比赛看看，就会发现大家的差距其实大得可怕，1000人的比赛，可能第一名accuracy到0.95，第五十名还在0.6动弹不得。”</p>
-<p>想想我，不就是这个情况吗？一开始我自己的代码真是一团糟，得亏其他选手开源了baseline，我才能有后续的一系列成绩。要走的路还长着呢！</p>
+<p>想想我，不就是这个情况吗？一开始我自己的代码真是一团糟，得亏其他选手开源了baseline，我才能有后续的一系列成绩。还差得远呢！</p>
 <p>继续努力。</p>
 ]]></content>
       <categories>
