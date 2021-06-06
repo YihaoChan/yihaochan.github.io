@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
 <meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
-<meta property="article:modified_time" content="2021-06-06T00:57:32.804Z">
+<meta property="article:modified_time" content="2021-06-06T01:05:11.431Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-06 08:57:32" itemprop="dateModified" datetime="2021-06-06T08:57:32+08:00">2021-06-06</time>
+                <time title="Modified: 2021-06-06 09:05:11" itemprop="dateModified" datetime="2021-06-06T09:05:11+08:00">2021-06-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -331,8 +331,8 @@
 <p><strong>Normandy: <em>N</em>EZHA, L<em>O</em>ng Sho<em>R</em>t-Term <em>M</em>emory, Hierarchical <em>A</em>ttention <em>N</em>etworks and <em>D</em>eep P<em>Y</em>ramid Convolutional Neural Networks</strong></p>
 <p>主要流程：</p>
 <ol>
-<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：先去除停用词(693、328)，然后使用WarmUp + 余弦退火进行学习率调整；</li>
-<li>对于NEZHA预训练模型：将训练集和测试集的description进行”一句一文档”的操作进行预训练，之所以进行”一句一文档”，是为了取消BERT模型的NSP(Next Sentence Prediction)任务，因为NSP任务在BERT类模型上表现都不好，这一点已在RoBERTa论文中有提到。单进行MLM任务之后，接MLP进入微调训练阶段，结合FGM对抗训练和WarmUp + 余弦退火调整学习率；</li>
+<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</li>
+<li>对于NEZHA预训练模型：将训练集和测试集的description进行”一句一文档”的操作进行预训练，之所以进行”一句一文档”，是为了取消BERT模型的NSP(Next Sentence Prediction)任务，因为NSP任务在BERT类模型上表现都不好，这一点已在RoBERTa论文中有提到。单进行MLM任务之后，接MLP进入微调训练阶段，结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</li>
 <li>两类模型均使用分层采样与k折交叉验证；</li>
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
@@ -346,8 +346,8 @@
 <p><strong>Noah’s Ark: <em>N</em>EZHA Trained J<em>O</em>intly and Sep<em>A</em>rately with <em>H</em>AN, L<em>S</em>TM and Deep Pyr<em>A</em>mid Convolutional Neu<em>R</em>al Networ<em>K</em>s</strong></p>
 <p>主要流程：</p>
 <ol>
-<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：采用分开训练的策略，即，将任务1和任务2分别训练，之后再将结果进行拼接。训练过程中，先去除停用词(693、328)，然后使用WarmUp + 余弦退火进行学习率调整；</li>
-<li>对于NEZHA预训练模型：采用联合训练与分开训练两种策略，即，(1)将两个任务拼接作为一个完整任务进行训练，(2)将任务1和任务2分别训练，之后再将结果进行拼接。因为NEZHA单模表现实在太优秀，所以两种策略都做，之后再融合。训练过程中，结合FGM对抗训练和WarmUp + 余弦退火调整学习率；</li>
+<li>对于基础深度学习模型(LSTM、HAN、DPCNN)：采用分开训练的策略，即，将任务1和任务2分别训练，之后再将结果进行拼接。训练过程中，先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</li>
+<li>对于NEZHA预训练模型：采用联合训练与分开训练两种策略，即，(1)将两个任务拼接作为一个完整任务进行训练，(2)将任务1和任务2分别训练，之后再将结果进行拼接。因为NEZHA单模表现实在太优秀，所以两种策略都做，之后再融合。训练过程中，结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</li>
 <li>两类模型均使用分层采样与k折交叉验证；</li>
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
@@ -380,7 +380,7 @@
 <p>Well begun is half done. 看到当时的成绩，信心十足。之后进行了蛮多的尝试的：</p>
 <ol>
 <li>训练策略：这个是最重要的尝试：把两个任务用两个模型分别训练，最后再把推理结果拼接。刚好初赛和复赛的任务1完全一致，所以对于任务1，可以把初赛的训练集也加进来，数据量一下又增加了。一开始还蛮郁闷的，线上一直报OOM(Out of Memory)，明明在脚本入口都释放显存了呀！后来问了下另一个队伍的老哥，建议我两个模型写成两个独立的脚本，真有用，一下就搞定了，名次又往前冲到前5了好像；</li>
-<li>固定好NEZHA的折数fold和轮数epoch后，开始加tricks。对抗训练、Warmup + 余弦退火调整学习率、伪标签…把NEZHA单模调到了稳定前10，当时前10好多队伍都是用了模型融合才达到的成绩，我们单模就进了前10，所以单模的效果是真的非常好；</li>
+<li>固定好NEZHA的折数fold和轮数epoch后，开始加tricks。对抗训练、Warm Up + 余弦退火调整学习率、伪标签…把NEZHA单模调到了稳定前10，当时前10好多队伍都是用了模型融合才达到的成绩，我们单模就进了前10，所以单模的效果是真的非常好；</li>
 <li>然后把NEZHA分开训练和联合训练两个不同策略训练出来的模型的推理结果做加权平均后，又冲上去了好几名；</li>
 <li>临近复赛快结束的时候，学姐那边几个基础深度学习模型也调得差不多了，和NEZHA一融，离进决赛的资格(前6)非常非常接近。</li>
 </ol>
