@@ -6,11 +6,11 @@ abbrlink: c516f0e3
 date: 2021-06-05 22:12:16
 ---
 
-# 0 前言
-
 第一次参赛，意义特殊，记录一下。
 
 <!--more-->
+
+# 0 前言
 
 比赛链接：https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn
 
