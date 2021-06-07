@@ -299,7 +299,7 @@
 <li>两类模型均使用分层采样与k折交叉验证；</li>
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
-<p>单模结果与融合后结果用t-SNE降至三维后可视化后，如图：</p>
+<p>单模结果与融合后结果用t-SNE降至三维并可视化后，如图：</p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_lstm.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_han.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_dpcnn.jpg"></p>
