@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
 <meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
-<meta property="article:modified_time" content="2021-06-07T02:25:33.676Z">
+<meta property="article:modified_time" content="2021-06-07T15:57:34.086Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-07 10:25:33" itemprop="dateModified" datetime="2021-06-07T10:25:33+08:00">2021-06-07</time>
+                <time title="Modified: 2021-06-07 23:57:34" itemprop="dateModified" datetime="2021-06-07T23:57:34+08:00">2021-06-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7k</span>
+              <span>7.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
+              <span>7 mins.</span>
             </span>
 
         </div>
@@ -313,7 +313,7 @@
 <td align="center">3 4, 0 2</td>
 </tr>
 </tbody></table>
-<p>数据没有任何明文，都是对中文进行加密后的数字，属于无明文<strong>脱敏</strong>数据。由此判断，无法直接调用任何已经开源的预训练权重做下游任务，如果要采用预训练模型的话，需要从头训练(Train from scratch)。</p>
+<p>数据没有任何明文，都是对中文进行加密后的数字，属于无明文<strong>脱敏</strong>数据。由此判断，无法直接调用任何已经开源的预训练权重做下游任务，如果要采用预训练模型的话，需要从头训练(<strong>Train from scratch</strong>)。</p>
 <h1 id="3-数据探索与分析"><a href="#3-数据探索与分析" class="headerlink" title="3 数据探索与分析"></a>3 数据探索与分析</h1><h2 id="3-1-data分布"><a href="#3-1-data分布" class="headerlink" title="3.1 data分布"></a>3.1 data分布</h2><p>对训练集和A榜测试集的description字段数据用PCA降至二维并可视化分布图后，如图：</p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_train.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/distribution_test_a.jpg"></p>
@@ -338,12 +338,13 @@
 <li>两类模型均使用分层采样与k折交叉验证；</li>
 <li>最后将两部分结果进行加权融合，单模得分较高者获得更大的权重。</li>
 </ol>
-<p>单模结果与融合后结果用TSNE降至三维后可视化：</p>
+<p>单模结果与融合后结果用t-SNE降至三维后可视化后，如图：</p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_lstm.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_han.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_dpcnn.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg"></p>
 <p><img data-src="/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg"></p>
+<p>直观上粗略看一下，集成之后的结果”综合”了多个单模的结果，不会让部分数据太过极端，同时也有照顾到多方面的结果分布，体现出了模型融合的思想：”采纳多方意见”。</p>
 <h2 id="4-2-复赛"><a href="#4-2-复赛" class="headerlink" title="4.2 复赛"></a>4.2 复赛</h2><p>同初赛，复赛我们所采用的模型的名字为：</p>
 <p><strong>Noah’s Ark: <em>N</em>EZHA Trained J<em>O</em>intly and Sep<em>A</em>rately with <em>H</em>AN, L<em>S</em>TM and Deep Pyr<em>A</em>mid Convolutional Neu<em>R</em>al Networ<em>K</em>s</strong></p>
 <p>主要流程：</p>
@@ -364,9 +365,9 @@
 </ol>
 <p>复赛的测试集和提交结果等均在线上不可下载、不可打印，所以无可视化图。</p>
 <h1 id="5-其余尝试"><a href="#5-其余尝试" class="headerlink" title="5 其余尝试"></a>5 其余尝试</h1><ol>
-<li>伪标签：第一次先用原训练集进行训练后，对测试集做推理，得出初步推理结果。之后将推理得到的output和测试集的data拼接成新的训练数据加入训练集，再对这个新的训练集进行训练，最后对测试集再做一次推理，得到提交结果。不过这个方案在我们的模型上表现不好，一是掉分，二是运行时间又长了很多；</li>
-<li>数据增强：随机替换、随机删除、分段乱序。掉分原因可能是简单数据增强(EDA,  Easy Data Augmentation)所增强获得的数据质量不够高，增强后的数据分布可能破坏了原数据集的分布；</li>
-<li>对损失函数手动分配权重：由于标签类别不平衡，最多的类别所对应数据数量有1846，最少的只有209，属于类别不平衡问题。因此考虑在训练的时候给损失函数直接设定一定的比例，比例大小和标签数量成反比，使得算法能够对小类数据具有更多的”注意力”。初赛时我做了这个尝试，不过效果不好。猜想：标签类别是否已经不平衡到需要手动分配权重的程度？也就是说，在这种情况下，手动分配权重是否有必要？；</li>
+<li>伪标签：第一次先用原训练集进行训练后，对测试集做推理，得出初步推理结果。之后将推理得到的output和测试集的data拼接成新的训练数据加入训练集，再对这个新的训练集进行训练，最后对测试集再做一次推理，得到提交结果。不过这个方案在我们的模型上表现不好，同时运行时间也长了很多；</li>
+<li>数据增强：随机交换句中的任意两个词、随机删除句中的部分词、将整个句子分为多段并打乱顺序。掉分原因可能是简单数据增强(EDA,  Easy Data Augmentation)所增强获得的数据质量不够高，增强后的数据分布可能破坏了原数据集的分布；</li>
+<li>对损失函数手动分配权重：由于标签类别不平衡，最多的类别所对应数据数量有1846，最少的只有209，属于类别不平衡问题。因此考虑在训练的时候给损失函数直接设定一定的比例，比例大小和标签数量成反比，使得算法能够对小类数据具有更多的”注意力”，即<strong>对长尾数据做重加权re-weighting</strong>。初赛时我做了这个尝试，不过效果不好。猜想：标签类别是否已经不平衡到需要手动分配权重的程度？也就是说，在这种情况下，手动分配权重是否有必要？；</li>
 <li>拼接Word2Vec和GloVe词向量做Embedding层的初始化：对于基础深度学习模型，先用Word2Vec和GloVe分别做词向量预训练，然后将这两部分词向量进行拼接，初始化Embedding层，不冻结权重，在训练过程中继续学习。可能的掉分原因：<ol>
 <li>词向量的解释性太差；</li>
 <li>对于CBOW模型，在训练阶段中心词的词向量是把窗口大小内上下文的词向量相加作为输入，显然这忽略了文本的序列信息；</li>
@@ -378,8 +379,8 @@
 <li>加载开源权重：尝试过在预训练的时候，用华为已经训练好了的权重做初始化(除Embedding层外，其余层的信息仍然有价值)，发现与不加载权重相比，线上得分相差非常小，还不排除是云平台不同机器的原因。考虑到加载权重需要额外空间，所以最后仍然采取全代码运行、不加载权重的方案。</li>
 </ol>
 <h1 id="6-量化指标"><a href="#6-量化指标" class="headerlink" title="6 量化指标"></a>6 量化指标</h1><ol>
-<li>训练时间：Tesla V100单卡，全流程运行需要42小时左右；</li>
-<li>推理速度：Tesla V100单卡，推理速度320ms/条。</li>
+<li>训练时间：Tesla V100单卡，全流程运行约42小时；</li>
+<li>推理速度：Tesla V100单卡，推理速度约320ms/条。</li>
 </ol>
 <h1 id="7-与自己个人有关的事情"><a href="#7-与自己个人有关的事情" class="headerlink" title="7 与自己个人有关的事情"></a>7 与自己个人有关的事情</h1><h2 id="7-1-参赛前"><a href="#7-1-参赛前" class="headerlink" title="7.1 参赛前"></a>7.1 参赛前</h2><p>二月末的时候，同班同学zyp发给了我有关这个比赛的链接，还是我们学校计算机学院公众号推送的。当时只看题目的时候，还觉得赛道一可能是数据挖掘类的题(做特征工程的那种)，赛道二明显是CV(不喜欢CV，直接跳过这个题)，赛道三是文本语义匹配，妥妥的NLP，而且肯定BERT当道的类型，当时还完全不了解BERT，只知道个名字…那个时候其实也没什么忙的事情做，而且以后也想往机器学习方面发展，总是要尝试第一次的嘛，看上去赛道一比较适合新手一点，所以就拉上之前做课程项目的固定队友lrx同学，一起决定报名赛道一了。</p>
 <h2 id="7-2-初赛"><a href="#7-2-初赛" class="headerlink" title="7.2 初赛"></a>7.2 初赛</h2><h3 id="7-2-1-尝试"><a href="#7-2-1-尝试" class="headerlink" title="7.2.1 尝试"></a>7.2.1 尝试</h3><p>一开始一公布数据集和题目的时候，就开始自己动手实现了，仔细理解了一下题目，发现就是NLP的题。好在之前接触过一点NLP方面的东西，就对照着之前自己做的一些小demo，修修补补，抄抄删删，勉强做出来的baseline真是速度又慢、效果又差…一直很郁闷的时候，群里一位西交自动化的研究生师兄公布了他的baseline。当时跑通baseline之后，明显比我的成绩好得不要太多，就决定拿他的baseline来改了。其实后来才知道，一些热门的比赛中，会有一些选手公布自己的baseline给其他选手，算是一种分享。不过自己也不能太依赖别人的东西，是吧~</p>
