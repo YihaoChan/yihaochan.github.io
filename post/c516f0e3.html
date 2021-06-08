@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
 <meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
-<meta property="article:modified_time" content="2021-06-07T16:03:32.057Z">
+<meta property="article:modified_time" content="2021-06-08T03:44:09.327Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-08 00:03:32" itemprop="dateModified" datetime="2021-06-08T00:03:32+08:00">2021-06-08</time>
+                <time title="Modified: 2021-06-08 11:44:09" itemprop="dateModified" datetime="2021-06-08T11:44:09+08:00">2021-06-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,7 +288,7 @@
 <li><p>需求：判断身体若干目标区域是否有异常以及异常类型.</p>
 </li>
 </ul>
-<p>从”若干”可判断出任务属于<strong>多标签</strong>任务，从”区域是否有异常”及”异常类型”可以考虑将不同区域和不同类型做<strong>Onehot编码</strong>，之后进行<strong>0/1的二分类</strong>。简而言之，赛题属于NLP中的NLU自然语言理解领域下的多标签二分类问题。</p>
+<p>从”若干”可判断出任务属于<strong>多标签</strong>任务，从”区域是否有异常”及”异常类型”可以考虑将不同区域和不同类型做<strong>One-Hot编码</strong>，之后进行<strong>0/1的二分类</strong>。简而言之，赛题属于NLP中的NLU自然语言理解领域下的多标签二分类问题。</p>
 <h1 id="2-数据样例"><a href="#2-数据样例" class="headerlink" title="2 数据样例"></a>2 数据样例</h1><table>
 <thead>
 <tr>
@@ -388,7 +388,7 @@
 <h3 id="7-2-2-结识新队友"><a href="#7-2-2-结识新队友" class="headerlink" title="7.2.2 结识新队友"></a>7.2.2 结识新队友</h3><p>其实蛮可惜的，比赛开始以来zyp同学和lrx同学都有各自的事情要忙，一位忙实验室的论文、忙着做各种实验抽不出时间，一位因为疫情原因不得不放弃出国、转投简历找工作…所以几乎相当于我一直一个人在做比赛，实在蛮累的。记得当时我线上成绩在60名左右就上不去了，刚好群里一位选手的队伍线上40名，二缺一，就缺个调BERT的，而我正好想靠BERT继续冲分(因为传统深度学习模型在NLP的比赛实在太难冲前排了…)，所以就征求了一下两位同学的意见，想过去其他的队伍，毕竟靠自己一个人真的太难太累了，也不想把成绩就此止步。两位队友表示理解之后，我就向招队友的队伍自荐了一下，最后就进入了新队伍啦。</p>
 <h3 id="7-2-3-后期"><a href="#7-2-3-后期" class="headerlink" title="7.2.3 后期"></a>7.2.3 后期</h3><p>新队伍的队友是一位学姐和一位师兄。师兄发给了我BERT的keras版本baseline之后，我先花了一天了解了下BERT的原理，然后花了一下午看懂代码后优化，变成自己的风格。之后跑了个裸模型提交了一下，比我之前做的基础深度学习模型加一堆tricks和融合之后的效果好太多太多了…用的是BERT的变种——华为的NEZHA。不得不说，BERT人人都用是有道理的。切B榜之后，把NEZHA和学姐那边基础深度学习模型的结果融了一下，18名，进入复赛。</p>
 <h2 id="7-3-复赛"><a href="#7-3-复赛" class="headerlink" title="7.3 复赛"></a>7.3 复赛</h2><h3 id="7-3-1-A榜"><a href="#7-3-1-A榜" class="headerlink" title="7.3.1 A榜"></a>7.3.1 A榜</h3><p>进入复赛后，天池要求提供打包好了的Docker镜像，用线上云平台的机器运行。这一点对我们队来说还是很友好的。我就不说了，本科没机器，硕士还没找老师干活(还在自己补基础和做比赛嘿嘿)；学姐是力学相关专业的，机器学习只是她个人兴趣，所以也没有计算资源；有机器的就师兄那边了，但是有时候一天可能要做好多实验，我这边好几个、师兄那边好几个，只用他的机器实在很麻烦。所以就学了一下Docker，试了下能不能跑通提交后，我们队就都采用线上提交的方式了，刚好测试集在线上不可下载，把代码提交到云端，还能挂载线上的测试集，把文本加进语料库做NEZHA的预训练。挺好的，还多学了Docker这项技能。不得不说一句，天池提供的镜像还蛮难用的，兼容性不是很好…</p>
-<p>复赛的label在初赛的基础上增加多了一个任务，我就用NEZHA实现了一下，把两个任务拼接成一个总任务、做Onehot编码，其余环节不变。当时提交的队伍还蛮少的，我们直接到了前10了，还挺惊喜的。</p>
+<p>复赛的label在初赛的基础上增加多了一个任务，我就用NEZHA实现了一下，把两个任务拼接成一个总任务、做One-Hot编码，其余环节不变。当时提交的队伍还蛮少的，我们直接到了前10了，还挺惊喜的。</p>
 <p>Well begun is half done. 看到当时的成绩，信心十足。之后进行了蛮多的尝试的：</p>
 <ol>
 <li>训练策略：这个是最重要的尝试：把两个任务用两个模型分别训练，最后再把推理结果拼接。刚好初赛和复赛的任务1完全一致，所以对于任务1，可以把初赛的训练集也加进来，数据量一下又增加了。一开始还蛮郁闷的，线上一直报OOM(Out of Memory)，明明在脚本入口都释放显存了呀！后来问了下另一个队伍的老哥，建议我两个模型写成两个独立的脚本，真有用，一下就搞定了，名次又往前冲到前5了好像；</li>
