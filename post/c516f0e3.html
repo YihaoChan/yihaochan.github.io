@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
 <meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
-<meta property="article:modified_time" content="2021-06-14T17:17:02.081Z">
+<meta property="article:modified_time" content="2021-06-14T17:25:00.370Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-15 01:17:02" itemprop="dateModified" datetime="2021-06-15T01:17:02+08:00">2021-06-15</time>
+                <time title="Modified: 2021-06-15 01:25:00" itemprop="dateModified" datetime="2021-06-15T01:25:00+08:00">2021-06-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -430,10 +430,10 @@
 </ol>
 </li>
 </ol>
-<p>放在这个题目上，可以认为任务1和任务2这两个任务就满足<strong>多任务</strong>这一定义。因此，有两个队伍基于这个思想采用了两种不同的策略：</p>
+<p>有两个队伍基于这两个思想采取了两种不同的策略：</p>
 <ol>
-<li>首先用任务1对预训练权重进行微调，之后将任务1的微调权重用于微调任务2，再反过来微调任务1，最终再微调任务2；</li>
-<li>首先用任务2对预训练权重进行微调，之后加载上一步的权重，对任务1和任务2同时训练。</li>
+<li>交替训练任务1和任务2满足<strong>任务自适应</strong>的定义，因此，首先用任务1对预训练权重进行微调，之后将任务1的微调权重用于微调任务2，再反过来微调任务1，最终再微调任务2；</li>
+<li>持续学习：首先用任务2对预训练权重进行微调，之后加载上一步的权重，对任务1和任务2同时训练。</li>
 </ol>
 </li>
 <li><p>Lookahead；</p>
