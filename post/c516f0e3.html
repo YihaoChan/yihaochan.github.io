@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_nezha.jpg">
 <meta property="og:image" content="http://example.com/images/2021-%E5%A4%A9%E6%B1%A0-GAIIC-%E8%B5%9B%E9%81%93%E4%B8%80-%E8%AE%B0%E5%BD%95/3D_results_merge.jpg">
 <meta property="article:published_time" content="2021-06-05T14:12:16.000Z">
-<meta property="article:modified_time" content="2021-06-14T13:14:14.506Z">
+<meta property="article:modified_time" content="2021-06-14T16:32:24.893Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Competition">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-14 21:14:14" itemprop="dateModified" datetime="2021-06-14T21:14:14+08:00">2021-06-14</time>
+                <time title="Modified: 2021-06-15 00:32:24" itemprop="dateModified" datetime="2021-06-15T00:32:24+08:00">2021-06-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7.6k</span>
+              <span>7.9k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -352,8 +352,34 @@
 <li><p>对于NEZHA预训练模型：预训练阶段取消NSP任务，微调训练阶段采用<strong>联合训练</strong>(Jointly Train)与<strong>分开训练</strong>(Separately Train)两种策略，即：</p>
 <ol>
 <li>联合训练：将两个任务拼接作为一个完整任务进行训练；</li>
-<li>分开训练：将任务1和任务2分别用不同模型训练，之后再将结果进行拼接。</li>
+<li>分开训练：将任务1和任务2分别用不同模型训练，之后再将结果进行拼接。恰好，初赛与复赛的任务1相同，因此可以将初赛的训练集一起加入，与复赛的训练集一起训练任务1，数据量得以提升。</li>
 </ol>
+<p>在使用相同超参数的情况下，实验结果表明，在这个数据集中，分开训练不仅能提升总得分，还能缩小两个任务之间的得分差距：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>任务1得分</th>
+<th>任务2得分</th>
+<th>总得分</th>
+<th>任务gap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>联合训练</td>
+<td>0.9257</td>
+<td>0.9142</td>
+<td>0.9212</td>
+<td>0.0115</td>
+</tr>
+<tr>
+<td>分开训练</td>
+<td>0.9326</td>
+<td>0.9302</td>
+<td>0.9316</td>
+<td>0.0024</td>
+</tr>
+</tbody></table>
 <p>因为NEZHA单模表现实在太优秀，所以两种策略都做，之后再融合。训练阶段结合FGM对抗训练和Warm Up + 余弦退火调整学习率；</p>
 </li>
 <li><p>对于基础深度学习模型(LSTM、HAN、DPCNN)：采用分开训练的策略，训练过程中，先去除停用词(693、328)，然后使用Warm Up + 余弦退火进行学习率调整；</p>
@@ -389,15 +415,15 @@
 <li>将训练集的data和label拼接在一起作为新的一整条文本，即：把标签也加进去预训练，因为标签本身也自带语义；</li>
 <li>引入SBO(Span-Boundary Objective)任务[参考SpanBERT]；</li>
 <li>引入SOP(Sentence-Order Prediction)任务[参考ALBERT]；</li>
-<li>尝试通过对齐词频的方式找出分句词，制造NSP任务的语料，否则不能构造出真正的NSP任务；</li>
+<li>尝试通过对齐词频的方式找出分句符，制造NSP任务的语料，否则不能构造出真正的NSP任务；</li>
 <li>多任务联合训练[参考MT-DNN]。</li>
 </ol>
 <h2 id="7-2-微调"><a href="#7-2-微调" class="headerlink" title="7.2 微调"></a>7.2 微调</h2><ol>
-<li>交替训练：用任务1对预训练权重进行微调，之后将任务1的微调权重用于微调任务2，再反过来微调任务1，最终再微调任务2；</li>
+<li>交替训练：[Don’t Stop Pretraining]一文指出，要做领域自适应(DAPT, domain-adaptive pretraining)和任务自适应(TAPT, task-adaptive pretraining)的预训练。放在这个题目上，可以认为任务1和任务2这两个任务就满足<strong>不同的任务自适应</strong>这一定义。因此，用任务1对预训练权重进行微调，之后将任务1的微调权重用于微调任务2，再反过来微调任务1，最终再微调任务2；</li>
 <li>Lookahead；</li>
 <li>SWA(Stochastic Weight Averaging，随机权重平均)。</li>
 </ol>
-<h1 id="8-与自己个人有关的事情"><a href="#8-与自己个人有关的事情" class="headerlink" title="8 与自己个人有关的事情"></a>8 与自己个人有关的事情</h1><h2 id="8-1-参赛前"><a href="#8-1-参赛前" class="headerlink" title="8.1 参赛前"></a>8.1 参赛前</h2><p>二月末的时候，同班同学zyp发给了我有关这个比赛的链接，还是我们学校计算机学院公众号推送的。当时只看题目的时候，还觉得赛道一可能是数据挖掘类的题(做特征工程的那种)，赛道二明显是CV(不喜欢CV，直接跳过这个题)，赛道三是文本语义匹配，妥妥的NLP，而且肯定BERT当道的类型，当时还完全不了解BERT，只知道个名字…那个时候其实也没什么忙的事情做，而且以后也想往机器学习方面发展，总是要尝试第一次的嘛，看上去赛道一比较适合新手一点，所以就拉上之前做课程项目的固定队友lrx同学，一起决定报名赛道一了。</p>
+<h1 id="8-个人心路历程"><a href="#8-个人心路历程" class="headerlink" title="8 个人心路历程"></a>8 个人心路历程</h1><h2 id="8-1-参赛前"><a href="#8-1-参赛前" class="headerlink" title="8.1 参赛前"></a>8.1 参赛前</h2><p>二月末的时候，同班同学zyp发给了我有关这个比赛的链接，还是我们学校计算机学院公众号推送的。当时只看题目的时候，还觉得赛道一可能是数据挖掘类的题(做特征工程的那种)，赛道二明显是CV(不喜欢CV，直接跳过这个题)，赛道三是文本语义匹配，妥妥的NLP，而且肯定BERT当道的类型，当时还完全不了解BERT，只知道个名字…那个时候其实也没什么忙的事情做，而且以后也想往机器学习方面发展，总是要尝试第一次的嘛，看上去赛道一比较适合新手一点，所以就拉上之前做课程项目的固定队友lrx同学，一起决定报名赛道一了。</p>
 <h2 id="8-2-初赛"><a href="#8-2-初赛" class="headerlink" title="8.2 初赛"></a>8.2 初赛</h2><h3 id="8-2-1-尝试"><a href="#8-2-1-尝试" class="headerlink" title="8.2.1 尝试"></a>8.2.1 尝试</h3><p>一开始一公布数据集和题目的时候，就开始自己动手实现了，仔细理解了一下题目，发现就是NLP的题。好在之前接触过一点NLP方面的东西，就对照着之前自己做的一些小demo，修修补补，抄抄删删，勉强做出来的baseline真是速度又慢、效果又差…一直很郁闷的时候，群里一位西交自动化的研究生师兄公布了他的baseline。当时跑通baseline之后，明显比我的成绩好得不要太多，就决定拿他的baseline来改了。其实后来才知道，一些热门的比赛中，会有一些选手公布自己的baseline给其他选手，算是一种分享。不过自己也不能太依赖别人的东西，是吧~</p>
 <p>看懂baseline，然后封装、优化，形成自己的代码风格后，就开始改模型、调参了。期间多亏了zyp同学在他们实验室的服务器上(偷偷)给我开了个账号，让我连进去炼丹，具体过程见这篇博客：<a target="_blank" rel="noopener" href="https://yihaochan.github.io/post/cb736208.html">记一次内网穿透</a>。把baseline的CNN换上自己中意的双向LSTM之后，一度冲上30名，然后就瓶颈了…好在天池设立了一个”周周星”环节——鼓励每周的排行榜前两名分享自己的方案和心得给其他选手。不得不说这个环节真是太好了，从各位周周星那里真的学到超多比赛的方法和技巧，运用上他们所说的一部分技巧后，我的成绩又有了很大的进步。</p>
 <h3 id="8-2-2-结识新队友"><a href="#8-2-2-结识新队友" class="headerlink" title="8.2.2 结识新队友"></a>8.2.2 结识新队友</h3><p>其实蛮可惜的，比赛开始以来zyp同学和lrx同学都有各自的事情要忙，一位忙实验室的论文、忙着做各种实验抽不出时间，一位因为疫情原因不得不放弃出国、转投简历找工作…所以几乎相当于我一直一个人在做比赛，实在蛮累的。记得当时我线上成绩在60名左右就上不去了，刚好群里一位选手的队伍线上40名，二缺一，就缺个调BERT的，而我正好想靠BERT继续冲分(因为传统深度学习模型在NLP的比赛实在太难冲前排了…)，所以就征求了一下两位同学的意见，想过去其他的队伍，毕竟靠自己一个人真的太难太累了，也不想把成绩就此止步。两位队友表示理解之后，我就向招队友的队伍自荐了一下，最后就进入了新队伍啦。</p>
@@ -407,7 +433,7 @@
 <p>Well begun is half done. 看到当时的成绩，信心十足。之后进行了蛮多的尝试的：</p>
 <ol>
 <li>训练策略：这个是最重要的尝试：把两个任务用两个模型分别训练，最后再把推理结果拼接。刚好初赛和复赛的任务1完全一致，所以对于任务1，可以把初赛的训练集也加进来，数据量一下又增加了。一开始还蛮郁闷的，线上一直报OOM(Out of Memory)，明明在脚本入口都释放显存了呀！后来问了下另一个队伍的老哥，建议我两个模型写成两个独立的脚本，真有用，一下就搞定了，名次又往前冲到前5了好像；</li>
-<li>固定好NEZHA的折数fold和轮数epoch后，开始加tricks。对抗训练、Warm Up + 余弦退火调整学习率、伪标签…把NEZHA单模调到了稳定前10，当时前10好多队伍都是用了模型融合才达到的成绩，我们单模就进了前10，所以单模的效果是真的非常好；</li>
+<li>固定好NEZHA的折数fold和轮数epoch后，开始加tricks。对抗训练、Warm Up + 余弦退火调整学习率…把NEZHA单模调到了稳定前10，当时前10好多队伍都是用了模型融合才达到的成绩，我们单模就进了前10，所以单模的效果是真的非常好；</li>
 <li>然后把NEZHA分开训练和联合训练两个不同策略训练出来的模型的推理结果做加权平均后，又冲上去了好几名；</li>
 <li>临近复赛快结束的时候，学姐那边几个基础深度学习模型也调得差不多了，和NEZHA一融，离进决赛的资格(前6)非常非常接近。</li>
 </ol>
@@ -508,7 +534,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-text">0 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%B5%9B%E9%A2%98%E4%BB%8B%E7%BB%8D"><span class="nav-text">1 赛题介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E6%A0%B7%E4%BE%8B"><span class="nav-text">2 数据样例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-text">3 数据探索与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-data%E5%88%86%E5%B8%83"><span class="nav-text">3.1 data分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%8F%A5%E9%95%BF%E5%88%86%E5%B8%83"><span class="nav-text">3.2 句长分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="nav-text">3.3 词频统计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%A8%A1%E5%9E%8B"><span class="nav-text">4 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%88%9D%E8%B5%9B"><span class="nav-text">4.1 初赛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%A4%8D%E8%B5%9B"><span class="nav-text">4.2 复赛</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B6%E4%BD%99%E5%B0%9D%E8%AF%95"><span class="nav-text">5 其余尝试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E9%87%8F%E5%8C%96%E6%8C%87%E6%A0%87"><span class="nav-text">6 量化指标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-text">7 值得借鉴的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-text">7.1 预训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E5%BE%AE%E8%B0%83"><span class="nav-text">7.2 微调</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E4%B8%8E%E8%87%AA%E5%B7%B1%E4%B8%AA%E4%BA%BA%E6%9C%89%E5%85%B3%E7%9A%84%E4%BA%8B%E6%83%85"><span class="nav-text">8 与自己个人有关的事情</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%8F%82%E8%B5%9B%E5%89%8D"><span class="nav-text">8.1 参赛前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%88%9D%E8%B5%9B"><span class="nav-text">8.2 初赛</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-1-%E5%B0%9D%E8%AF%95"><span class="nav-text">8.2.1 尝试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-2-%E7%BB%93%E8%AF%86%E6%96%B0%E9%98%9F%E5%8F%8B"><span class="nav-text">8.2.2 结识新队友</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-3-%E5%90%8E%E6%9C%9F"><span class="nav-text">8.2.3 后期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%A4%8D%E8%B5%9B"><span class="nav-text">8.3 复赛</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-1-A%E6%A6%9C"><span class="nav-text">8.3.1 A榜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-2-B%E6%A6%9C"><span class="nav-text">8.3.2 B榜</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%86%B3%E8%B5%9B"><span class="nav-text">8.4 决赛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-5-%E5%8F%8D%E6%80%9D"><span class="nav-text">8.5 反思</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-text">0 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%B5%9B%E9%A2%98%E4%BB%8B%E7%BB%8D"><span class="nav-text">1 赛题介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E6%A0%B7%E4%BE%8B"><span class="nav-text">2 数据样例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-text">3 数据探索与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-data%E5%88%86%E5%B8%83"><span class="nav-text">3.1 data分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%8F%A5%E9%95%BF%E5%88%86%E5%B8%83"><span class="nav-text">3.2 句长分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="nav-text">3.3 词频统计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%A8%A1%E5%9E%8B"><span class="nav-text">4 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%88%9D%E8%B5%9B"><span class="nav-text">4.1 初赛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%A4%8D%E8%B5%9B"><span class="nav-text">4.2 复赛</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B6%E4%BD%99%E5%B0%9D%E8%AF%95"><span class="nav-text">5 其余尝试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E9%87%8F%E5%8C%96%E6%8C%87%E6%A0%87"><span class="nav-text">6 量化指标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-text">7 值得借鉴的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-text">7.1 预训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E5%BE%AE%E8%B0%83"><span class="nav-text">7.2 微调</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E4%B8%AA%E4%BA%BA%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B"><span class="nav-text">8 个人心路历程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%8F%82%E8%B5%9B%E5%89%8D"><span class="nav-text">8.1 参赛前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%88%9D%E8%B5%9B"><span class="nav-text">8.2 初赛</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-1-%E5%B0%9D%E8%AF%95"><span class="nav-text">8.2.1 尝试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-2-%E7%BB%93%E8%AF%86%E6%96%B0%E9%98%9F%E5%8F%8B"><span class="nav-text">8.2.2 结识新队友</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-3-%E5%90%8E%E6%9C%9F"><span class="nav-text">8.2.3 后期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%A4%8D%E8%B5%9B"><span class="nav-text">8.3 复赛</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-1-A%E6%A6%9C"><span class="nav-text">8.3.1 A榜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-2-B%E6%A6%9C"><span class="nav-text">8.3.2 B榜</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%86%B3%E8%B5%9B"><span class="nav-text">8.4 决赛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-5-%E5%8F%8D%E6%80%9D"><span class="nav-text">8.5 反思</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
