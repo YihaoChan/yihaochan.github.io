@@ -21,15 +21,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制">
+  <meta name="description" content="I&#x2F;O通信里的阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制通俗理解">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制">
 <meta property="og:url" content="http://example.com/post/6a12d2c0.html">
 <meta property="og:site_name" content="Yihao Chan&#39;s Blog">
-<meta property="og:description" content="阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制">
+<meta property="og:description" content="I&#x2F;O通信里的阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制通俗理解">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-09-08T04:44:24.000Z">
-<meta property="article:modified_time" content="2021-09-08T04:47:52.352Z">
+<meta property="article:modified_time" content="2021-09-08T05:37:54.833Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="I&#x2F;O Communication">
 <meta name="twitter:card" content="summary">
@@ -218,7 +218,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-09-08 12:44:24 / Modified: 12:47:52" itemprop="dateCreated datePublished" datetime="2021-09-08T12:44:24+08:00">2021-09-08</time>
+              <time title="Created: 2021-09-08 12:44:24 / Modified: 13:37:54" itemprop="dateCreated datePublished" datetime="2021-09-08T12:44:24+08:00">2021-09-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,12 +255,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="阻塞-非阻塞-同步-异步-回调机制"><a href="#阻塞-非阻塞-同步-异步-回调机制" class="headerlink" title="阻塞/非阻塞/同步/异步/回调机制"></a>阻塞/非阻塞/同步/异步/回调机制</h1><a id="more"></a>
+        <p>I/O通信里的阻塞/非阻塞/同步/异步/回调机制通俗理解</p>
+<a id="more"></a>
 
 <h2 id="1-同步-amp-异步"><a href="#1-同步-amp-异步" class="headerlink" title="1 同步&amp;异步"></a>1 同步&amp;异步</h2><p>同步，还是异步，是从”消息通信”的视角去描述这个接口的行为。而所谓的消息通信，你可以简单的把”函数”想象成一个淘宝客服，把”调用方”想象成你自己。调用函数的过程其实就是三步：</p>
 <ol>
 <li>“你”询问”淘宝客服”一个问题。比如，”在吗？”。在这个场景中，你就是”调用方”，”淘宝客服”是函数，而那句”在吗？”，则是函数参数，你把函数参数传递给函数；</li>
-<li>“淘宝客服”进行后台处理。这时淘宝客服接收到了你的询问消息，如果他没有在忙，那么他可以立即回复你。如果他现在正在忙，比如淘宝客服需要先看一下你之前的行为记录，然后再决定如何回复你。(比如他看到你正在浏览一双袜子,觉得你在潜在的买家，他决定回复你。比如他看到你三天前下单买了一双袜子，但袜子还没有发货，他觉得你有退货的风险，从而决定不理你，假装不在。) 这个客服思考决断的过程，就是函数内部进行处理运算的过程；</li>
+<li>“淘宝客服”进行后台处理。这时淘宝客服接收到了你的询问消息，如果他没有在忙，那么他可以立即回复你。如果他现在正在忙，比如淘宝客服需要先看一下你之前的行为记录，然后再决定如何回复你。(比如他看到你正在浏览一双袜子，觉得你是潜在的买家，他决定回复你。比如他看到你三天前下单买了一双袜子，但袜子还没有发货，他觉得你有退货的风险，从而决定不理你，假装不在。) 这个客服思考决断的过程，就是函数内部进行处理运算的过程；</li>
 <li>最终，淘宝客服回复了你，”在的，亲”。这里，回复这个动作，就是函数返回，而”在的，亲”这句话，就是函数的返回值。</li>
 </ol>
 <p>你从这个角度去看，函数调用，就是消息通信的过程，你发送消息给函数，函数经过一番运算思考，把结果再回发给你。</p>
@@ -272,7 +273,7 @@
 <p>异步客服需要解决一个问题：当真正的运算结果得出之后，被调用的客服如何通知作为调用方的你，取走答案。在淘宝客户端上，是通过手机的震动消息提醒，是通过聊天框的红点。</p>
 <p>所以，关于同步，和异步，这里做一个稍微正式一点的总结：</p>
 <ol>
-<li>同步的过程：调用方传参-&gt;函数运算-&gt;函数返回运算结果。</li>
+<li>同步的过程：调用方传参-&gt;函数运算-&gt;函数返回运算结果；</li>
 <li>异步的过程：调用方传参-&gt;函数说我知道了-&gt;然后过了五分钟，函数说我算出来了，结果在这里，你来取。</li>
 </ol>
 <p>这里我们着眼于消息的传递，通讯方式，也就是站在函数的角度去看，结果是如何传递给调用方的。同步接口，运算结果在”函数调用”这个场景下就返回给了调用方。异步接口：运算结果在”函数调用”这个场景之后的<strong>某个不定的时刻</strong>，通过<em>某种通知方式</em>，传递给调用方。</p>
@@ -293,10 +294,10 @@
 <li>同步，非阻塞：调用方发起调用直至得到结果之前这段时间，可以做其它事情。但被调函数接收到参数直到运算结束之前，都不会返回。很显然这个逻辑概念说得通，但其实是反常理的。因为：如果调用方在发起调用之后，得到结果(函数返回)之前，要去做其它事情，那么就有一个隐含的前提条件：调用方必须知道本次调用的耗时，且被调方(函数)严格遵守这个时间约定。一毫秒不多，一毫秒不少。这在代码的世界里是很难达到的；</li>
 <li>异步，且阻塞：调用方发起调用直至得到结果之前，都不能干其它事情。被调用函数接收到参数之后立即返回，但在随后的某个时间点才把运算结果传递给调用方。之后调用方继续活动。这个逻辑概念依然说得通，但是很别扭。这就相当于，在你问淘宝客服问题的时候，淘宝客服的自动回复机器人已经给你说了”客服很忙哟，可能过一会才能答复你”，但你就是啥也不干，非得等到客服答复你之后，才去上厕所。这种情景在代码世界里可能发生，但似乎很智障；</li>
 <li>异步，非阻塞：调用方发起调用直至得到结果之前这段时间，可以做其它事情。被调函数接收到参数后立即返回，但在之后的某一个时间点才把运算结果传递给调用方。这说起来很绕口，举个栗子，还是客服：<ol>
-<li>你拿出手机，向客服发送消息，”在吗？”。然后把手机放桌子上，转向上厕所去了。</li>
-<li>客服收到你的消息，机器人回复你”不好意思，客服现在很忙，但我们会尽快答复你的，亲!”。</li>
-<li>你上厕所回来了，看手机没消息，又去吃饭了。</li>
-<li>客服开始处理你的消息，终于开始给你真正的回复”亲，2333号客服为您服务，你有什么要了解的吗？”。</li>
+<li>你拿出手机，向客服发送消息，”在吗？”。然后把手机放桌子上，转向上厕所去了；</li>
+<li>客服收到你的消息，机器人回复你”不好意思，客服现在很忙，但我们会尽快答复你的，亲！”；</li>
+<li>你上厕所回来了，看手机没消息，又去吃饭了；</li>
+<li>客服开始处理你的消息，终于开始给你真正的回复”亲，2333号客服为您服务，你有什么要了解的吗？”；</li>
 <li>你吃饭的过程中，手机震动，你点开淘宝，发现有了回复。整个流程结束。</li>
 </ol>
 </li>
@@ -438,7 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E-%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5-%E5%9B%9E%E8%B0%83%E6%9C%BA%E5%88%B6"><span class="nav-text">阻塞&#x2F;非阻塞&#x2F;同步&#x2F;异步&#x2F;回调机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%8C%E6%AD%A5-amp-%E5%BC%82%E6%AD%A5"><span class="nav-text">1 同步&amp;异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%98%BB%E5%A1%9E-amp-%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-text">2 阻塞&amp;非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-text">3 回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">4 参考链接</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%8C%E6%AD%A5-amp-%E5%BC%82%E6%AD%A5"><span class="nav-text">1 同步&amp;异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%98%BB%E5%A1%9E-amp-%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-text">2 阻塞&amp;非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-text">3 回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">4 参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
