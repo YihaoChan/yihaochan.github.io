@@ -1,8 +1,9 @@
 ---
 title: Cpp容器的内存管理
+abbrlink: 56ebe54a
 date: 2021-09-09 15:11:12
-categories:
-tags:
+categories: Operation System
+tags: Memory Management
 ---
 
 以C++中常用的vector、set为例，分析其数据在内存中的存储位置，并且探究容器内部内存释放的相关问题。
