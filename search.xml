@@ -65,6 +65,12 @@
 <li>真正释放内存要使用clear() + shrink_to_fit()，或者swap()。</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>Operation System</category>
+      </categories>
+      <tags>
+        <tag>Memory Management</tag>
+      </tags>
   </entry>
   <entry>
     <title>Vim的系统剪贴板的奇妙发现</title>
