@@ -10,7 +10,7 @@ tags: Memory Management
 
 <!--more-->
 
-# 1 容器变量在堆还是在栈上
+# 1 容器相关变量在堆还是在栈上
 
 ```c++
 #include <string>
