@@ -1,5 +1,5 @@
 ---
-title: Linux中多线程环境下fork后产生死锁
+title: Linux中多线程环境下fork后重复加锁会产生死锁
 categories: Operation System
 tags: Linux-fork-thread-lock
 abbrlink: 381fa2ee
@@ -74,7 +74,7 @@ int main() {
 
 运行后终端回显如下：
 
-![fork_lock](/images/Linux中多线程环境下fork后产生死锁/fork_lock.png)
+![](/images/Linux中多线程环境下fork后重复加锁会产生死锁/fork_lock.png)
 
 可见，程序无法运行下去，根本没办法运行到test那一行，故操作系统产生死锁。
 
@@ -126,7 +126,7 @@ int main() {
 
 运行后终端回显如下：
 
-![thread_lock](/images/Linux中多线程环境下fork后产生死锁/thread_lock.png)
+![](/images/Linux中多线程环境下fork后重复加锁会产生死锁/thread_lock.png)
 
 可见，程序顺利运行直至结束，没有产生死锁。
 
