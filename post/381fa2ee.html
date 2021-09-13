@@ -21,21 +21,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。">
+  <meta name="description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统引发死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux中多线程环境下fork后重复加锁会产生死锁">
+<meta property="og:title" content="Linux中多线程环境下fork后重复加锁会引发死锁">
 <meta property="og:url" content="http://example.com/post/381fa2ee.html">
 <meta property="og:site_name" content="Yihao Chan&#39;s Blog">
-<meta property="og:description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。">
+<meta property="og:description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统引发死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/fork_lock.png">
-<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/thread_lock.png">
+<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E5%BC%95%E5%8F%91%E6%AD%BB%E9%94%81/fork_lock.png">
+<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E5%BC%95%E5%8F%91%E6%AD%BB%E9%94%81/thread_lock.png">
 <meta property="article:published_time" content="2021-09-13T13:19:04.000Z">
-<meta property="article:modified_time" content="2021-09-13T13:33:14.174Z">
+<meta property="article:modified_time" content="2021-09-13T16:00:20.845Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Linux-fork-thread-lock">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/fork_lock.png">
+<meta name="twitter:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E5%BC%95%E5%8F%91%E6%AD%BB%E9%94%81/fork_lock.png">
 
 <link rel="canonical" href="http://example.com/post/381fa2ee.html">
 
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>Linux中多线程环境下fork后重复加锁会产生死锁 | Yihao Chan's Blog</title>
+  <title>Linux中多线程环境下fork后重复加锁会引发死锁 | Yihao Chan's Blog</title>
   
 
 
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux中多线程环境下fork后重复加锁会产生死锁
+          Linux中多线程环境下fork后重复加锁会引发死锁
         </h1>
 
         <div class="post-meta">
@@ -219,10 +219,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-09-13 21:19:04 / Modified: 21:33:14" itemprop="dateCreated datePublished" datetime="2021-09-13T21:19:04+08:00">2021-09-13</time>
+              <time title="Created: 2021-09-13 21:19:04" itemprop="dateCreated datePublished" datetime="2021-09-13T21:19:04+08:00">2021-09-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-14 00:00:20" itemprop="dateModified" datetime="2021-09-14T00:00:20+08:00">2021-09-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -239,14 +245,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.6k</span>
+              <span>2.9k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>2 mins.</span>
+              <span>3 mins.</span>
             </span>
 
         </div>
@@ -258,7 +264,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
+        <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统引发死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
 <a id="more"></a>
 
 <h1 id="1-实验背景"><a href="#1-实验背景" class="headerlink" title="1 实验背景"></a>1 实验背景</h1><ol>
@@ -272,17 +278,21 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">func_thread</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child thread gets the lock\n&quot;</span>);</span><br><span class="line">    pthread_mutex_lock(&amp;mutex);</span><br><span class="line">    sleep(<span class="number">5</span>);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_proc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child process wants the lock\n&quot;</span>);</span><br><span class="line">    pthread_mutex_lock(&amp;mutex);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;tid, <span class="literal">NULL</span>, func_thread, <span class="literal">NULL</span>);</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// 确保在fork成功之前，子线程已经获得锁</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        pthread_join(tid, <span class="literal">NULL</span>);</span><br><span class="line">        pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        func_proc();</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        wait(<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    pthread_join(tid, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_mutex_destroy(&amp;mutex);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;end\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>运行后终端回显如下：</p>
-<p><img data-src="/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/fork_lock.png"></p>
-<p>可见，程序无法运行下去，根本没办法运行到test那一行，故操作系统产生死锁。</p>
+<p><img data-src="/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E5%BC%95%E5%8F%91%E6%AD%BB%E9%94%81/fork_lock.png"></p>
+<p>可见，程序无法运行下去，根本没办法运行到test那一行，故操作系统引发死锁。</p>
 <h1 id="3-子线程加锁"><a href="#3-子线程加锁" class="headerlink" title="3 子线程加锁"></a>3 子线程加锁</h1><p>将子进程改为子线程，让子线程去加锁：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">func1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child thread1 gets the lock\n&quot;</span>);</span><br><span class="line">    pthread_mutex_lock(&amp;mutex);</span><br><span class="line">    sleep(<span class="number">5</span>);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">func2</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child thread2 wants the lock\n&quot;</span>);</span><br><span class="line">    pthread_mutex_lock(&amp;mutex);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child thread2 successfly gets the lock\n&quot;</span>);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">pthread_t</span> tid1, tid2;</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;tid1, <span class="literal">NULL</span>, func1, <span class="literal">NULL</span>);</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// 确保在thread2运行之前，thread1已经获得锁</span></span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;tid2, <span class="literal">NULL</span>, func2, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_join(tid1, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(tid2, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_mutex_destroy(&amp;mutex);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;end\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>运行后终端回显如下：</p>
-<p><img data-src="/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/thread_lock.png"></p>
-<p>可见，程序顺利运行直至结束，没有产生死锁。</p>
-<h1 id="4-分析"><a href="#4-分析" class="headerlink" title="4 分析"></a>4 分析</h1><p>fork()有一个特点：子进程只拥有一个执行线程，而这个执行线程就是<strong>调用fork的那个线程</strong>的完整复制，除了调用fork的那个线程外，其余线程它根本不知道、不认识，<strong>父进程中其他的线程在子进程中都会消失</strong>。此外，子进程自动继承了父进程中互斥锁的状态(原来加锁了的话，现在还是加锁的)。</p>
+<p><img data-src="/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E9%87%8D%E5%A4%8D%E5%8A%A0%E9%94%81%E4%BC%9A%E5%BC%95%E5%8F%91%E6%AD%BB%E9%94%81/thread_lock.png"></p>
+<p>可见，程序顺利运行直至结束，没有引发死锁。</p>
+<h1 id="4-简要分析"><a href="#4-简要分析" class="headerlink" title="4 简要分析"></a>4 简要分析</h1><h2 id="4-1-子进程"><a href="#4-1-子进程" class="headerlink" title="4.1 子进程"></a>4.1 子进程</h2><p>fork()有一个特点：子进程只拥有一个执行线程，而这个执行线程就是<strong>调用fork的那个线程</strong>的完整复制，除了调用fork的那个线程外，其余线程它根本不知道、不认识，<strong>父进程中其他的线程在子进程中都会消失</strong>。此外，子进程自动继承了父进程中互斥锁的状态(原来加锁了的话，现在还是加锁的)。</p>
 <p>如果这个时候，对于已经加锁了但还没释放的锁，子进程依旧想对这个锁上锁的话，那么，把互斥锁加锁的那个线程会等待子进程释放锁，子进程又会等待那个线程释放锁才能获得锁，故导致了死锁。并且，我们无法对该锁进行解锁，因为<strong>在子进程中，该锁的持有者并不存在</strong>，它根本不知道是哪个线程谁给这个互斥锁加了锁。</p>
-<p>解决方法之一，是不要用子进程去加锁，而采用<strong>子线程</strong>。一般情况下两个线程对同一个mutex进行lock，并不会造成死锁，后lock的线程会<strong>进入等待状态</strong>，直到前一个线程进行unlock。</p>
+<h2 id="4-2-子线程"><a href="#4-2-子线程" class="headerlink" title="4.2 子线程"></a>4.2 子线程</h2><p>解决方法之一，是不要用子进程去加锁，而采用<strong>子线程</strong>。一般情况下两个线程对同一个mutex进行lock，并不会造成死锁，后lock的线程会<strong>进入等待状态</strong>，直到前一个线程进行unlock。</p>
+<p>在Linux中，互斥锁的类型默认为PTHREAD_MUTEX_NORMAL，代表普通锁。当一个线程对一个普通锁加锁以后，其余请求对该锁加锁的线程将形成一个<strong>等待队列</strong>，并在该锁解锁后按优先级获得它。但是，这样会导致一个问题：一个线程如果对一个已经加锁的普通锁再次加锁，也就是这个线程对这个锁加两遍锁，那么就会引发死锁。试想一下：等待队列里面是自己这个线程本身，那么释放后的锁又给了自己，又被自己上了锁，那肯定就是死锁了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> res = (PTHREAD_MUTEX_NORMAL == PTHREAD_MUTEX_DEFAULT) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, res);</span><br></pre></td></tr></table></figure>
+
+<p>res为1，说明Linux默认的锁的类型就是上述这种普通锁。</p>
 
     </div>
 
@@ -368,7 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%9E%E9%AA%8C%E8%83%8C%E6%99%AF"><span class="nav-text">1 实验背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AD%90%E8%BF%9B%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">2 子进程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">3 子线程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%88%86%E6%9E%90"><span class="nav-text">4 分析</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%9E%E9%AA%8C%E8%83%8C%E6%99%AF"><span class="nav-text">1 实验背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AD%90%E8%BF%9B%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">2 子进程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">3 子线程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%AE%80%E8%A6%81%E5%88%86%E6%9E%90"><span class="nav-text">4 简要分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-text">4.1 子进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AD%90%E7%BA%BF%E7%A8%8B"><span class="nav-text">4.2 子线程</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -449,13 +459,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">34k</span>
+    <span title="Symbols count total">35k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">31 mins.</span>
+    <span title="Reading time total">32 mins.</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
   </div>

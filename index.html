@@ -204,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/381fa2ee.html" class="post-title-link" itemprop="url">Linux中多线程环境下fork后重复加锁会产生死锁</a>
+            <a href="/post/381fa2ee.html" class="post-title-link" itemprop="url">Linux中多线程环境下fork后重复加锁会引发死锁</a>
         </h2>
 
         <div class="post-meta">
@@ -213,10 +213,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-09-13 21:19:04 / Modified: 21:33:14" itemprop="dateCreated datePublished" datetime="2021-09-13T21:19:04+08:00">2021-09-13</time>
+              <time title="Created: 2021-09-13 21:19:04" itemprop="dateCreated datePublished" datetime="2021-09-13T21:19:04+08:00">2021-09-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-14 00:00:20" itemprop="dateModified" datetime="2021-09-14T00:00:20+08:00">2021-09-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -233,14 +239,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.6k</span>
+              <span>2.9k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>2 mins.</span>
+              <span>3 mins.</span>
             </span>
 
         </div>
@@ -252,7 +258,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
+          <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统引发死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/post/381fa2ee.html#more" rel="contents">
@@ -978,13 +984,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">34k</span>
+    <span title="Symbols count total">35k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">31 mins.</span>
+    <span title="Reading time total">32 mins.</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
   </div>
