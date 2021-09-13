@@ -1,11 +1,14 @@
 ---
 title: Linux中多线程环境下fork后产生死锁
-date: 2021-09-13 21:19:04
 categories: Operation System
 tags: Linux-fork-thread-lock
+abbrlink: 381fa2ee
+date: 2021-09-13 21:19:04
 ---
 
 简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。
+
+<!--more-->
 
 # 1 实验背景
 
