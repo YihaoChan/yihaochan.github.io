@@ -21,30 +21,36 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="God helps those who help themselves.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yihao Chan&#39;s Blog">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。 1 实验背景 主线程创建子线程； 在子线程中对互斥量mutex上锁(lock)，然后sleep(5)； 在第一步中，需要sleep(1)，确保主线程不要太快创建好子进程，以至于子进程创建好的时候第2步还没上好">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中多线程环境下fork后产生死锁">
+<meta property="og:url" content="http://example.com/post/381fa2ee.html">
 <meta property="og:site_name" content="Yihao Chan&#39;s Blog">
-<meta property="og:description" content="God helps those who help themselves.">
+<meta property="og:description" content="简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。 1 实验背景 主线程创建子线程； 在子线程中对互斥量mutex上锁(lock)，然后sleep(5)； 在第一步中，需要sleep(1)，确保主线程不要太快创建好子进程，以至于子进程创建好的时候第2步还没上好">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/fork_lock.png">
+<meta property="og:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/thread_lock.png">
+<meta property="article:published_time" content="2021-09-13T13:19:04.000Z">
+<meta property="article:modified_time" content="2021-09-13T13:21:30.830Z">
 <meta property="article:author" content="Yihao Chan">
+<meta property="article:tag" content="Linux-fork-thread-lock">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Linux%E4%B8%AD%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8Bfork%E5%90%8E%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81/fork_lock.png">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/post/381fa2ee.html">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Yihao Chan's Blog</title>
+  <title>Linux中多线程环境下fork后产生死锁 | Yihao Chan's Blog</title>
   
 
 
@@ -184,9 +190,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -202,10 +209,9 @@
       <meta itemprop="name" content="Yihao Chan's Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/381fa2ee.html" class="post-title-link" itemprop="url">Linux中多线程环境下fork后产生死锁</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Linux中多线程环境下fork后产生死锁
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -252,7 +258,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
+        <p>简单实验表明：在Linux操作系统的多线程执行环境下，调用fork()函数后的子进程如果对已经加锁的锁继续加锁，则会使操作系统产生死锁；而让子线程对已经加锁的锁继续加锁的话，则能够避免死锁。</p>
 <h1 id="1-实验背景"><a href="#1-实验背景" class="headerlink" title="1 实验背景"></a>1 实验背景</h1><ol>
 <li>主线程创建子线程；</li>
 <li>在子线程中对互斥量mutex上锁(lock)，然后sleep(5)；</li>
@@ -276,591 +282,38 @@
 <p>如果这个时候，对于已经加锁了但还没释放的锁，子进程依旧想对这个锁上锁的话，那么，把互斥锁加锁的那个线程会等待子进程释放锁，子进程又会等待那个线程释放锁才能获得锁，故导致了死锁。并且，我们无法对该锁进行解锁，因为<strong>在子进程中，该锁的持有者并不存在</strong>，它根本不知道是哪个线程谁给这个互斥锁加了锁。</p>
 <p>解决方法之一，是不要用子进程去加锁，而采用<strong>子线程</strong>。一般情况下两个线程对同一个mutex进行lock，并不会造成死锁，后lock的线程会<strong>进入等待状态</strong>，直到前一个线程进行unlock。</p>
 
-      
     </div>
 
     
     
     
     
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢阅读。-------------</div>
+
+    
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/56ebe54a.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/56ebe54a.html" class="post-title-link" itemprop="url">Cpp容器的内存管理</a>
-        </h2>
+          <div class="post-tags">
+              <a href="/tags/Linux-fork-thread-lock/" rel="tag"><i class="fa fa-tag"></i> Linux-fork-thread-lock</a>
+          </div>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-09-09 15:11:12 / Modified: 15:25:41" itemprop="dateCreated datePublished" datetime="2021-09-09T15:11:12+08:00">2021-09-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operation-System/" itemprop="url" rel="index"><span itemprop="name">Operation System</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>以C++中常用的vector、set为例，分析其数据在内存中的存储位置，并且探究容器内部内存释放的相关问题。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/56ebe54a.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/56ebe54a.html" rel="prev" title="Cpp容器的内存管理">
+      <i class="fa fa-chevron-left"></i> Cpp容器的内存管理
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/6a12d2c0.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/6a12d2c0.html" class="post-title-link" itemprop="url">阻塞/非阻塞/同步/异步/回调机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-09-08 12:44:24 / Modified: 13:41:01" itemprop="dateCreated datePublished" datetime="2021-09-08T12:44:24+08:00">2021-09-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operation-System/" itemprop="url" rel="index"><span itemprop="name">Operation System</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>3.6k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>3 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>I/O通信里的阻塞/非阻塞/同步/异步/回调机制通俗理解</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/6a12d2c0.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/c516f0e3.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/c516f0e3.html" class="post-title-link" itemprop="url">2021-天池-GAIIC-赛道一-记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-06-05 22:12:16" itemprop="dateCreated datePublished" datetime="2021-06-05T22:12:16+08:00">2021-06-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-21 15:50:45" itemprop="dateModified" datetime="2021-06-21T15:50:45+08:00">2021-06-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.3k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>8 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h1><p>第一次参赛，意义特殊，记录一下。</p>
-<p>比赛链接：<a target="_blank" rel="noopener" href="https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn">https://tianchi.aliyun.com/competition/entrance/531852/introduction?lang=zh-cn</a></p>
-<p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/YihaoChan/2021-Tianchi-GAIIC-Track1-Rank-3">https://github.com/YihaoChan/2021-Tianchi-GAIIC-Track1-Rank-3</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/c516f0e3.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/cb736208.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/cb736208.html" class="post-title-link" itemprop="url">记一次内网穿透</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-21 05:26:28" itemprop="dateCreated datePublished" datetime="2021-03-21T05:26:28+08:00">2021-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-23 00:47:06" itemprop="dateModified" datetime="2021-03-23T00:47:06+08:00">2021-03-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>3.6k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>3 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>最近和同学在做大数据比赛，需要用到GPU服务器加速模型训练。而自己在家里，没有服务器资源可用。另一位同学在学校，他们的实验室有服务器，且可以(偷偷)拿来跑比赛要用的模型，但是只能用校园网才能连上。而我又需要经常用到服务器，总是发给他们跑也怪麻烦的，所以想到了一个办法——内网穿透。通过内网穿透，就可以实现从我自己(校外)的机器访问到校园内的实验室机器。此处特别感谢两位技术宅同学想到了这个办法！</p>
-<p>一开始，A同学先用他自己已经租了的阿里云服务器配置好了一遍内网穿透。而我这几天也租(免费试用)了一个来玩玩，所以也想尝试下自己搭一下内网穿透。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/cb736208.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/10c2209c.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/10c2209c.html" class="post-title-link" itemprop="url">Vim的系统剪贴板的奇妙发现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-12-11 16:34:35" itemprop="dateCreated datePublished" datetime="2020-12-11T16:34:35+08:00">2020-12-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-21 07:00:02" itemprop="dateModified" datetime="2021-03-21T07:00:02+08:00">2021-03-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operation-System/" itemprop="url" rel="index"><span itemprop="name">Operation System</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>3.1k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>3 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>学习Vim的时候，接触了<code>yy</code>和<code>p</code>的Vim窗口内部复制与粘贴命令。但是有一次，在Vim中执行<code>yy</code>命令后，关闭Vim，想把复制到的整一行文字粘贴到已经关闭Vim了的终端上时，却一直无法粘贴，怎么按粘贴快捷键都是空白。对于这个问题有点搞不懂，就上网搜了一下，原来想要在Vim以外的进程上粘贴东西的时候，需要用到Vim里的<strong>系统剪贴板</strong>。但是，这个Vim的”系统”剪贴板，也不是真正的操作系统的”系统”剪贴板。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/10c2209c.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/post/4c43581b.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/assets/avatar.jpg">
-      <meta itemprop="name" content="Yihao Chan">
-      <meta itemprop="description" content="God helps those who help themselves.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yihao Chan's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/4c43581b.html" class="post-title-link" itemprop="url">God helps those who help themselves.</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-10-19 15:04:05" itemprop="dateCreated datePublished" datetime="2020-10-19T15:04:05+08:00">2020-10-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-07 11:52:35" itemprop="dateModified" datetime="2021-04-07T11:52:35+08:00">2021-04-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Diary/" itemprop="url" rel="index"><span itemprop="name">Diary</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.3k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="陈漪皓同学曲折的申研之路"><a href="#陈漪皓同学曲折的申研之路" class="headerlink" title="陈漪皓同学曲折的申研之路"></a>陈漪皓同学曲折的申研之路</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p style="text-indent:2em">
-推免之路终于画上句点啦~三年来，很累，很辛苦，但熬过来之后，一切都变得值得。
-</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/4c43581b.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
@@ -913,6 +366,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%9E%E9%AA%8C%E8%83%8C%E6%99%AF"><span class="nav-text">1 实验背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AD%90%E8%BF%9B%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">2 子进程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%8A%A0%E9%94%81"><span class="nav-text">3 子线程加锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%88%86%E6%9E%90"><span class="nav-text">4 分析</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
