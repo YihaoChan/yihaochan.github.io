@@ -21,17 +21,24 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="God helps those who help themselves.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yihao Chan&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/I-O-Communication/index.html">
+  <meta name="description" content="需求：在Linux系统中，如何快速清空一个10G的文件？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统中快速清空一个文件">
+<meta property="og:url" content="http://example.com/post/d6d3eae9.html">
 <meta property="og:site_name" content="Yihao Chan&#39;s Blog">
-<meta property="og:description" content="God helps those who help themselves.">
+<meta property="og:description" content="需求：在Linux系统中，如何快速清空一个10G的文件？">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/null_redirect.png">
+<meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/colon_redirect.png">
+<meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/truncate.png">
+<meta property="article:published_time" content="2021-09-14T09:00:17.000Z">
+<meta property="article:modified_time" content="2021-09-14T09:03:16.425Z">
 <meta property="article:author" content="Yihao Chan">
+<meta property="article:tag" content="Linux-clear-file">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/null_redirect.png">
 
-<link rel="canonical" href="http://example.com/tags/I-O-Communication/">
+<link rel="canonical" href="http://example.com/post/d6d3eae9.html">
 
 
 <script id="page-configurations">
@@ -39,12 +46,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Tag: I/O Communication | Yihao Chan's Blog</title>
+  <title>Linux系统中快速清空一个文件 | Yihao Chan's Blog</title>
   
 
 
@@ -184,51 +191,145 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">I/O Communication
-          <small>Tag</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/post/d6d3eae9.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar.jpg">
+      <meta itemprop="name" content="Yihao Chan">
+      <meta itemprop="description" content="God helps those who help themselves.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yihao Chan's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统中快速清空一个文件
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-14 17:00:17 / Modified: 17:03:16" itemprop="dateCreated datePublished" datetime="2021-09-14T17:00:17+08:00">2021-09-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operation-System/" itemprop="url" rel="index"><span itemprop="name">Operation System</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+        <p>需求：在Linux系统中，如何快速清空一个10G的文件？</p>
+<a id="more"></a>
+
+<h1 id="1-回答1：rm命令-错误"><a href="#1-回答1：rm命令-错误" class="headerlink" title="1 回答1：rm命令(错误)"></a>1 回答1：rm命令(错误)</h1><p>执行rm命令并没有<strong>真正删除</strong>文件，而只是对这个文件做了<code>unlink</code>操作，删除对这个文件的链接。但在磁盘上，这个文件的数据和这些数据块仍然保留着，rm命令执行后，操作系统把inode和数据块都标记为<code>unused</code>，但并没有真正擦去这些数据，文件的内容会被下次写入的内容覆盖。</p>
+<h1 id="2-方法1：null重定向"><a href="#2-方法1：null重定向" class="headerlink" title="2 方法1：null重定向"></a>2 方法1：null重定向</h1><p>将null重定向到文件中，可以快速清空文件的内容，或者说，使一个文件变为空白：</p>
+<ol>
+<li>执行<code>dd if=/dev/zero of=50M.file bs=1M count=50</code>创建一个50M的文件；</li>
+<li>备份50M.file为backup；</li>
+<li>执行<code>du -h backup</code>查看文件大小，为50M；</li>
+<li>执行<code>&gt; backup</code>清空文件内容；</li>
+<li>再次执行<code>du -h backup</code>查看文件大小，为0。</li>
+</ol>
+<p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/null_redirect.png"></p>
+<h1 id="3-方法2：冒号重定向"><a href="#3-方法2：冒号重定向" class="headerlink" title="3 方法2：冒号重定向"></a>3 方法2：冒号重定向</h1><p>Linux系统中，冒号<code>:</code>是一个内置符号，它什么也不做，充当一个no-op(无操作)。比如在编写脚本的过程中，某些语法结构需要多个部分组成，但开始阶段并没有想好或完成相应的代码，这时就可以用<code>:</code>来做占位符，类似于Python中的<code>pass</code>关键字，否则执行时就会报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;today&quot;</span> == <span class="string">&quot;2021-09-14&quot;</span> ]; <span class="keyword">then</span> </span><br><span class="line">    : </span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    : </span><br><span class="line"><span class="keyword">fi</span> </span><br></pre></td></tr></table></figure>
+
+<p>因此，可通过冒号重定向来快速清空文件内容：</p>
+<ol>
+<li>执行<code>dd if=/dev/zero of=50M.file bs=1M count=50</code>创建一个50M的文件；</li>
+<li>备份50M.file为backup；</li>
+<li>执行<code>du -h backup</code>查看文件大小，为50M；</li>
+<li>执行<code>: &gt; backup</code>清空文件内容；</li>
+<li>再次执行<code>du -h backup</code>查看文件大小，为0。</li>
+</ol>
+<p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/colon_redirect.png"></p>
+<h1 id="4-方法3：truncate命令"><a href="#4-方法3：truncate命令" class="headerlink" title="4 方法3：truncate命令"></a>4 方法3：truncate命令</h1><p>truncate命令可被用来将一个文件缩小或者扩展到某个给定的大小，可以利用它和 -s 参数来特别指定文件的大小。要清空文件的内容，则在下面的命令中将文件的大小设定为0：</p>
+<ol>
+<li>执行<code>dd if=/dev/zero of=50M.file bs=1M count=50</code>创建一个50M的文件；</li>
+<li>备份50M.file为backup；</li>
+<li>执行<code>du -h backup</code>查看文件大小，为50M；</li>
+<li>执行<code> truncate -s 0 backup</code>清空文件内容；</li>
+<li>再次执行<code>du -h backup</code>查看文件大小，为0。</li>
+</ol>
+<p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/truncate.png"></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sd4493091/article/details/80414053">https://blog.csdn.net/sd4493091/article/details/80414053</a></li>
+<li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/10883/where-do-files-go-when-the-rm-command-is-issued">https://unix.stackexchange.com/questions/10883/where-do-files-go-when-the-rm-command-is-issued</a></li>
+</ol>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
+    
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢阅读。-------------</div>
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-09-08T12:44:24+08:00"
-              content="2021-09-08">
-          09-08
-        </time>
-      </div>
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/post/6a12d2c0.html" itemprop="url">
-            <span itemprop="name">阻塞/非阻塞/同步/异步/回调机制</span>
-          </a>
-      </div>
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Linux-clear-file/" rel="tag"><i class="fa fa-tag"></i> Linux-clear-file</a>
+          </div>
 
-    </header>
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/381fa2ee.html" rel="prev" title="Linux中多线程环境下fork后重复加锁会引发死锁">
+      <i class="fa fa-chevron-left"></i> Linux中多线程环境下fork后重复加锁会引发死锁
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -281,6 +382,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9B%9E%E7%AD%941%EF%BC%9Arm%E5%91%BD%E4%BB%A4-%E9%94%99%E8%AF%AF"><span class="nav-text">1 回答1：rm命令(错误)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%96%B9%E6%B3%951%EF%BC%9Anull%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">2 方法1：null重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%96%B9%E6%B3%952%EF%BC%9A%E5%86%92%E5%8F%B7%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">3 方法2：冒号重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%96%B9%E6%B3%953%EF%BC%9Atruncate%E5%91%BD%E4%BB%A4"><span class="nav-text">4 方法3：truncate命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
