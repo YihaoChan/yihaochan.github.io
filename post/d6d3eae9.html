@@ -31,8 +31,9 @@
 <meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/null_redirect.png">
 <meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/colon_redirect.png">
 <meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/truncate.png">
+<meta property="og:image" content="http://example.com/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/rsync.png">
 <meta property="article:published_time" content="2021-09-14T09:00:17.000Z">
-<meta property="article:modified_time" content="2021-09-14T09:03:16.425Z">
+<meta property="article:modified_time" content="2021-09-14T09:38:04.423Z">
 <meta property="article:author" content="Yihao Chan">
 <meta property="article:tag" content="Linux-clear-file">
 <meta name="twitter:card" content="summary">
@@ -222,7 +223,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-09-14 17:00:17 / Modified: 17:03:16" itemprop="dateCreated datePublished" datetime="2021-09-14T17:00:17+08:00">2021-09-14</time>
+              <time title="Created: 2021-09-14 17:00:17 / Modified: 17:38:04" itemprop="dateCreated datePublished" datetime="2021-09-14T17:00:17+08:00">2021-09-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,14 +241,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1.1k</span>
+              <span>2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
+              <span>2 mins.</span>
             </span>
 
         </div>
@@ -272,7 +273,7 @@
 <li>再次执行<code>du -h backup</code>查看文件大小，为0。</li>
 </ol>
 <p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/null_redirect.png"></p>
-<h1 id="3-方法2：冒号重定向"><a href="#3-方法2：冒号重定向" class="headerlink" title="3 方法2：冒号重定向"></a>3 方法2：冒号重定向</h1><p>Linux系统中，冒号<code>:</code>是一个内置符号，它什么也不做，充当一个no-op(无操作)。比如在编写脚本的过程中，某些语法结构需要多个部分组成，但开始阶段并没有想好或完成相应的代码，这时就可以用<code>:</code>来做占位符，类似于Python中的<code>pass</code>关键字，否则执行时就会报错。</p>
+<h1 id="3-方法2：冒号重定向"><a href="#3-方法2：冒号重定向" class="headerlink" title="3 方法2：冒号重定向"></a>3 方法2：冒号重定向</h1><p>Linux系统中，冒号<code>:</code>是一个内置符号，它什么也不做，充当一个no-op(无操作)。比如在编写脚本的过程中，某些语法结构需要多个部分组成，但开始阶段并没有想好或完成相应的代码，这时就可以用<code>:</code>来做占位符，否则执行时就会报错。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;today&quot;</span> == <span class="string">&quot;2021-09-14&quot;</span> ]; <span class="keyword">then</span> </span><br><span class="line">    : </span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    : </span><br><span class="line"><span class="keyword">fi</span> </span><br></pre></td></tr></table></figure>
 
 <p>因此，可通过冒号重定向来快速清空文件内容：</p>
@@ -293,9 +294,32 @@
 <li>再次执行<code>du -h backup</code>查看文件大小，为0。</li>
 </ol>
 <p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/truncate.png"></p>
+<h1 id="5-方法4：rsync命令"><a href="#5-方法4：rsync命令" class="headerlink" title="5 方法4：rsync命令"></a>5 方法4：rsync命令</h1><p>假如你要在linux下删除大量文件，比如100万、1000万，像/var/spool/clientmqueue/的mail邮件，/usr/local/nginx/proxy_temp的nginx缓存等，那么rm -rf可能就会很慢。此时，可用rsync来清空目录或文件：</p>
+<ol>
+<li><p>准备一个52M的目录，命名为backup；</p>
+</li>
+<li><p>执行<code>du -sh backup</code>查看目录大小，为52M；</p>
+</li>
+<li><p>建立一个空目录：<code>mkdir empty</code>；</p>
+</li>
+<li><p>用rsync删除目标目录：<code>rsync --delete-before -d ./empty ./backup</code>。参数说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-delete-before：接收者在传输之前进行删除操作</span><br><span class="line">-d：传输的文件是目录</span><br></pre></td></tr></table></figure>
+
+<p>相当于把空目录替换到该目录中；</p>
+</li>
+<li><p>再次执行<code>du -h backup</code>查看文件大小，为0。</p>
+</li>
+</ol>
+<p><img data-src="/images/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%B8%85%E7%A9%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/rsync.png"></p>
+<p>为什么rsync能够快速删除大文件？</p>
+<ol>
+<li>rm命令大量调用了lstat64和unlink，可以推测删除每个文件前都从文件系统中做过一次lstat操作。过程：正式删除工作的第一阶段，需要通过getdirentries64调用，分批读取目录(每次大约为4K)，在内存中建立rm的文件列表；第二阶段，lstat64确定所有文件的状态；第三阶段，通过unlink执行实际删除。这三个阶段都有比较多的系统调用和文件系统操作；</li>
+<li>rsync所做的系统调用很少：没有针对单个文件做lstat和unlink操作。命令执行前期，rsync开启了一片共享内存，通过mmap方式加载目录信息。只做目录同步，不需要针对单个文件做unlink。另外，在其他人的评测里，rm的上下文切换比较多，会造成System CPU占用较多。 rm删除内容时，将目录的每一个条目逐个删除(unlink)，需要循环重复操作很多次；rsync删除内容时，建立好新的空目录，替换掉老目录，基本没开销。rsync命令<strong>只对文件做unlink操作</strong>，不做其他读取文件数据、检查应不应该被unlink等等操作，就是很<strong>纯粹地unlink</strong>。这就是<code>rsync</code>快的原因。</li>
+</ol>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sd4493091/article/details/80414053">https://blog.csdn.net/sd4493091/article/details/80414053</a></li>
 <li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/10883/where-do-files-go-when-the-rm-command-is-issued">https://unix.stackexchange.com/questions/10883/where-do-files-go-when-the-rm-command-is-issued</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sd4493091/article/details/80414053">https://blog.csdn.net/sd4493091/article/details/80414053</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.quora.com/What-does-rsync-do-that-makes-it-so-efficient-at-deleting-many-small-files">https://www.quora.com/What-does-rsync-do-that-makes-it-so-efficient-at-deleting-many-small-files</a></li>
 </ol>
 
     </div>
@@ -382,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9B%9E%E7%AD%941%EF%BC%9Arm%E5%91%BD%E4%BB%A4-%E9%94%99%E8%AF%AF"><span class="nav-text">1 回答1：rm命令(错误)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%96%B9%E6%B3%951%EF%BC%9Anull%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">2 方法1：null重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%96%B9%E6%B3%952%EF%BC%9A%E5%86%92%E5%8F%B7%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">3 方法2：冒号重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%96%B9%E6%B3%953%EF%BC%9Atruncate%E5%91%BD%E4%BB%A4"><span class="nav-text">4 方法3：truncate命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">参考链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9B%9E%E7%AD%941%EF%BC%9Arm%E5%91%BD%E4%BB%A4-%E9%94%99%E8%AF%AF"><span class="nav-text">1 回答1：rm命令(错误)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%96%B9%E6%B3%951%EF%BC%9Anull%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">2 方法1：null重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%96%B9%E6%B3%952%EF%BC%9A%E5%86%92%E5%8F%B7%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">3 方法2：冒号重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%96%B9%E6%B3%953%EF%BC%9Atruncate%E5%91%BD%E4%BB%A4"><span class="nav-text">4 方法3：truncate命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%96%B9%E6%B3%954%EF%BC%9Arsync%E5%91%BD%E4%BB%A4"><span class="nav-text">5 方法4：rsync命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -463,13 +487,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">36k</span>
+    <span title="Symbols count total">37k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">33 mins.</span>
+    <span title="Reading time total">34 mins.</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
   </div>
